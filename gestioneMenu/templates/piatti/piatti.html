@@ -1,0 +1,124 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/ingredienti.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#piatti" type="button" role="tab" aria-controls="home" aria-selected="true">Piatti</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#ingredientiPiatti" type="button" role="tab" aria-controls="profile" aria-selected="false">Ingredienti Piatti</button>
+    </li>
+  </ul>
+  <br>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="piatti" role="tabpanel">
+        <!-- PIATTI -->
+        <div class="row">
+          {% if permessiAzioni %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <form hx-post="{% url 'nuovoPiatto' %}" hx-swap="outerHTML" class="formInserimento">
+                <div x-data="{ inserimento: false }">
+                  <div class="row">
+                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Piatto</button>
+                  </div>
+                  
+                  <div x-show="inserimento">
+                    <div class="row">
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                    </div>
+                
+                    <br>
+                    {% csrf_token %}
+                    {{ form }}
+                    <br>
+                
+                    
+                  </div>
+                
+                </div>
+                </form>
+            </div>
+            {% endif %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <div id="divModifica"></div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <div id="divElimina"></div>
+            </div>
+          </div>
+          
+          
+          
+          <table class="table table-primary">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Nome</th>
+                  <th scope="col">Tempo Preparazione</th>
+                  <th scope="col">Tempo Cottura</th>
+                  <th scope="col">Tempo Totale</th>
+                  <th scope="col">Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for piatto in piatti %}
+                  <tr>
+                      <th scope="row">
+                        {{ piatto.id}}
+                      </th>
+                      <td>
+                          {{ piatto.nome }}
+                      </td>
+                      <td>
+                          {{ piatto.tempoPreparazione}} Minuti
+                      </td>
+                      <td>
+                          {{ piatto.tempoCottura}} Minuti
+                      </td>
+                      <td>
+                          {{ piatto.tempoTotale}} Minuti
+                      </td>
+                      <td>
+                        <div class="row">
+                          {% if permessiAzioni %}
+                          <div class="col-sm-6 col-md-3">
+                            <form hx-post="{% url 'modificaPiatto' %}" hx-swap="outerHTML" hx-target="#divModifica">
+                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
+                              {% csrf_token %}
+                              <button type="submit"><i class="fas fa-edit"></i></button>
+                            </form>
+                          </div>
+                          <div class="col-sm-6 col-md-3">
+                            <form hx-post="{% url 'eliminaPiatto' %}" hx-swap="outerHTML" hx-target="#divElimina">
+                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
+                              {% csrf_token %}
+                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto?')"><i class="fas fa-trash"></i></button>
+                            </form>
+                          </div>
+                          {% endif %}
+          
+                        </div>
+                        
+                      </td>
+                  </tr>
+          
+                  {% endfor %}
+                
+              </tbody>
+            </table>
+    </div>
+    <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">ingpi...</div>
+  </div>
+
+
+
+
+{% endblock %}

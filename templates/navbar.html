@@ -1,0 +1,15 @@
+{% extends 'common.html' %}
+
+{% block contentPrincipale %}
+    <nav class="navbar navbar-dark bg-primary">
+        <a class="navbar-brand" href="{% url 'home' %}">&nbsp;&nbsp;&nbsp;Gestione Ristorante</a>
+        <form class="formLogout" method="POST" action="{% url 'effettuaLogout' %}">
+            {% csrf_token %}
+            <button type="submit" class="buttonLogout" onclick="return confirm('Vuoi effettuare il logout?')"><i class="fas fa-sign-out-alt iconaLogout"></i></button>
+        </form>
+    </nav>
+    <br>
+    {% block content %}
+    {% endblock %}
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/gestioneMenu.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        
+        <div class="col-sm-12 col-md-6 col-lg-3 categoria">
+            <a href="{% url 'gestioneMenu' %}">
+                <div class="contenutoCategoria">
+                    <i class="fas fa-book fa-6x"></i>
+                    <p>Modifica Menu</p>
+                </div>
+            </a>
+        </div>
+       
+        <div class="col-sm-12 col-md-6 col-lg-3 categoria">
+            <a href="{% url 'piatti' %}">
+                <div class="contenutoCategoria">
+                    <i class="fas fa-utensils fa-6x"></i>
+                    <p>Aggiunta Piatti</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-sm-12 col-md-6 col-lg-3 categoria">
+            <a href="{% url 'ingredienti' %}">
+                <div class="contenutoCategoria">
+                    <i class="fas fa-carrot fa-6x"></i>
+                    <p>Aggiunta Ingredienti</p>
+                </div>
+            </a>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

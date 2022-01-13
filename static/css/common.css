@@ -1,0 +1,36 @@
+body{
+    background-color: #e6e6e6;
+}
+a, a:hover{
+    text-decoration: none;
+    color: black;
+}
+.categoria{
+    padding: 10px;
+}
+.contenutoCategoria{
+    padding: 10px;
+    background: rgb(2,0,36);
+    background-color: rgb(30,109,255);
+    border: 1px solid black;
+    border-radius: 10px;
+    text-align: center;
+    font-size: larger;  
+    transition: background-color 0.5s ease-out;
+}
+.contenutoCategoria:hover{
+    background-color: rgb(144, 183, 255);
+}
+.iconaCategoria{
+    size: 10%;
+}
+.iconaLogout{
+    color: white;
+}
+.formLogout{
+    margin-right: 2%;
+}
+.buttonLogout{
+    border:none;
+    background-color: rgb(30,109,255);
+}

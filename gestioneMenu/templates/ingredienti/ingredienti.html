@@ -1,0 +1,103 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/ingredienti.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="row">
+  {% if permessiAzioni %}
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <form hx-post="{% url 'nuovoIngrediente' %}" hx-swap="outerHTML" class="formInserimento">
+      <div x-data="{ inserimento: false }">
+        <div class="row">
+          <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Ingrediente</button>
+        </div>
+        
+        <div x-show="inserimento">
+          <div class="row">
+            <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
+            <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+          </div>
+      
+          <br>
+          {% csrf_token %}
+          {{ form }}
+          <br>
+      
+          
+        </div>
+      
+      </div>
+      </form>
+  </div>
+  {% endif %}
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <div id="divModifica"></div>
+  </div>
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <div id="divElimina"></div>
+  </div>
+</div>
+
+
+
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Fatto in Casa</th>
+        <th scope="col">Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for ingrediente in ingredienti %}
+        <tr>
+            <th scope="row">
+              {{ ingrediente.id}}
+            </th>
+            <td>
+              {{ ingrediente.nome }}
+            </td>
+            <td>
+                {% if ingrediente.fattoInCasa %} 
+                Sì
+                {% else %}
+                No
+                {% endif %}
+            </td>
+            <td>
+              {% if permessiAzioni %}
+              <div class="row">
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaIngrediente' %}" hx-swap="outerHTML" hx-target="#divModifica">
+                    <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
+                    {% csrf_token %}
+                    <button type="submit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-swap="outerHTML" hx-target="#divElimina">
+                    <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+
+              </div>
+              {% endif %} 
+              
+              
+            </td>
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>
+
+{% endblock %}

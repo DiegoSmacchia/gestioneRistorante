@@ -1,0 +1,58 @@
+
+label, input, textarea { /* Stili comuni agli elementi del form */
+    color: #000000; /* Colore del testo */
+    float: left; /* Float a sinistra */
+    margin: 10px 0; /* Margini */
+}
+label { /* Stili per la label */
+    display: block; /* Impostiamo la label come elemento blocco */
+    line-height: 30px; /* Altezza di riga */
+}
+
+input { padding-left: 2px;}
+
+.divSuccess{
+    background-color: #198754;
+    border-radius: 10px;
+    padding: 10px;
+}
+.buttonClose{
+    width: 10%;
+    border-radius: 50px;
+    background-color: #198754;
+    border: 1px solid #f1f1f1;
+    position: relative;
+    top: 0;
+    right: 0;
+}
+span{
+    font-size: large !important;
+}
+@media only screen and (max-width: 600px) {
+    .buttonAzione, .divSuccess{
+        margin-left: 3%;
+        margin-right: 3%;
+        margin-bottom: 2%;
+        width: 94%;
+    }
+    .formInserimento{
+        width: 100%;
+    }
+    input,textarea{
+        width: 90%;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .buttonAzione, .divSuccess{
+        margin-left: 10px;
+        margin-bottom: 10px;
+    }
+    .formInserimento{
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    input{
+        width: 100%;
+    }
+}

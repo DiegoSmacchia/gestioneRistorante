@@ -1,0 +1,18 @@
+<div id="divModifica">
+    <form hx-post="{% url 'applicaModificheIngrediente' %}" hx-swap="outerHTML" class="formInserimento">
+      
+        <div>
+          <div class="row">
+            <button type="submit" class="btn btn-success buttonAzione">Conferma Modifica</button>
+          </div>
+      
+          <br>
+          {% csrf_token %}
+          {{ form }}
+          <input type="hidden" value="{{ idIngrediente }}" name="idIngrediente">
+          <br>
+      
+          
+        </div>
+  </form>
+</div>

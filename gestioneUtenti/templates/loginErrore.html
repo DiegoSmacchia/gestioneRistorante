@@ -1,0 +1,32 @@
+{% extends 'common.html' %}
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block contentPrincipale %}
+<div class="divLogin">
+    <div class="titoloLogin">
+        LOGIN
+    </div>
+    <div x-data="{ open: true }" x-show="open" class="divErrore">
+        <button @click="open = false" class="buttonClose"><i class="fas fa-times"></i></button>
+        {{messaggio}}
+    </div>
+    <div class="corpoLogin">
+            <div class="container">
+                <form method="POST" action="{% url 'autenticazione' %}">
+                    {% csrf_token %}
+                    <label>Username:</label>
+                    <input type="text" name="Username">
+                    <br><br>
+                    <label>Password:</label>
+                    <input type="password" name="Password">
+                    <br><br>
+                    <button type="submit" class="btn btn-primary">Login</button>
+                </form>
+            </div>       
+    </div>
+</div>
+{% endblock %}
