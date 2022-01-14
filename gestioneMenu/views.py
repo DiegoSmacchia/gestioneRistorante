@@ -1,8 +1,8 @@
 from django.core.checks.messages import Error
 from django.shortcuts import render
-from .models import Ingrediente, Piatto
+from .models import Ingrediente, IngredientePiatto, Piatto
 from django.contrib.auth.decorators import login_required
-from .forms import IngredienteForm, PiattoForm
+from .forms import IngredienteForm, IngredientePiattoForm, PiattoForm
 
 
 # Create your views here.
@@ -12,7 +12,6 @@ def gestioneMenu(request):
 ##Ingredienti
 @login_required()
 def ingredienti(request):
-    print(request.user.has_perm('gestioneMenu.delete_Ingrediente'))
     ingredienti = Ingrediente.objects.all()
     form = IngredienteForm()
     return render(request, 'ingredienti/ingredienti.html', {'ingredienti' : ingredienti, 'form':form, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Ingrediente')})
@@ -21,13 +20,15 @@ def ingredienti(request):
 def nuovoIngrediente(request):
     if request.method == 'POST':
         form = IngredienteForm(request.POST)
+        print("AONIUBYIVB")
         # check whether it's valid:
         if form.is_valid():
             # process the data in form.cleaned_data as required
-            nuovoIngrediente = Ingrediente(nome = form.cleaned_data['nome'], fattoInCasa = form.cleaned_data['fattoInCasa'])
+            nuovoIngrediente = Ingrediente(nome = form.cleaned_data['nome'], idMisura = form.cleaned_data['idMisura'], fattoInCasa = form.cleaned_data['fattoInCasa'])
             nuovoIngrediente.save()
             return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
         else:
+            print(form)
             return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
     else:      
         return Error
@@ -37,7 +38,7 @@ def modificaIngrediente(request):
     if request.method == 'POST':
         idIngrediente = request.POST['idIngrediente']
         ingrediente = Ingrediente.objects.get(id=idIngrediente)
-        form = IngredienteForm(initial={'nome':ingrediente.nome, 'fattoInCasa':ingrediente.fattoInCasa})
+        form = IngredienteForm(initial={'nome':ingrediente.nome, 'idMisura':ingrediente.idMisura, 'fattoInCasa':ingrediente.fattoInCasa})
 
         return render(request, 'ingredienti/modificaIngrediente.html', {'idIngrediente':idIngrediente, 'form':form})
     else:
@@ -52,6 +53,7 @@ def applicaModificheIngrediente(request):
             ingrediente = Ingrediente.objects.get(id=idIngrediente)
             ingrediente.nome = form.cleaned_data['nome']
             ingrediente.fattoInCasa = form.cleaned_data['fattoInCasa']
+            ingrediente.idMisura = form.cleaned_data['idMisura']
             ingrediente.save()
             return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
         else:
@@ -73,8 +75,12 @@ def eliminaIngrediente(request):
 @login_required()
 def piatti(request):
     piatti = Piatto.objects.all()
-    form = PiattoForm()
-    return render(request, 'piatti/piatti.html', {'piatti' : piatti, 'form':form, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Piatto')})
+    piattoform = PiattoForm()
+    ingredientiPiatti = IngredientePiatto.objects.all()
+    ingredientePiattoForm = IngredientePiattoForm()
+    return render(request, 'piatti/piatti.html', {'piatti' : piatti, 'piattoform':piattoform, 
+                                                'ingredientipiatti':ingredientiPiatti, 'ingredientepiattoform':ingredientePiattoForm,
+                                                'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Piatto')})
 
 @login_required()
 def nuovoPiatto(request):
@@ -88,6 +94,57 @@ def nuovoPiatto(request):
                                 tempoCottura = form.cleaned_data['tempoCottura'])
             nuovoPiatto.tempoTotale = nuovoPiatto.tempoPreparazione + nuovoPiatto.tempoCottura
             nuovoPiatto.save()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
+    else:      
+        return Error
+
+@login_required()
+def modificaPiatto(request):
+    if request.method == 'POST':
+        idPiatto = request.POST['idPiatto']
+        piatto = Piatto.objects.get(id=idPiatto)
+        form = PiattoForm(initial={'nome':piatto.nome, 'tempoPreparazione':piatto.tempoPreparazione, 'tempoCottura':piatto.tempoCottura})
+
+        return render(request, 'piatti/modificaPiatto.html', {'idPiatto':idPiatto, 'form':form})
+    else:
+        return Error
+
+@login_required()
+def applicaModifichePiatto(request):
+    if request.method == 'POST':
+        form = PiattoForm(request.POST)
+        idPiatto = request.POST['idPiatto']
+        if form.is_valid():
+            piatto = Piatto.objects.get(id=idPiatto)
+            piatto.nome = form.cleaned_data['nome']
+            piatto.tempoPreparazione = form.cleaned_data['tempoPreparazione']
+            piatto.tempoCottura = form.cleaned_data['tempoCottura']
+            piatto.tempoTotale = piatto.tempoPreparazione + piatto.tempoCottura
+            piatto.save()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+
+    else:
+        return Error
+    
+@login_required()
+def eliminaPiatto(request):
+    if request.method == 'POST':
+        idPiatto = request.POST['idPiatto']
+        piatto = Piatto.objects.get(id=idPiatto)
+        piatto.delete()
+        return render(request, 'operazioneRiuscita.html', {'messaggio':"Piatto Eliminato!"})
+    else:
+        return Error
+
+##IngredientiPiatti
+@login_required()
+def nuovoIngredientePiatto(request):
+    if request.method == 'POST':
+        form = IngredientePiattoForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            # process the data in form.cleaned_data as required
+            print(form)
             return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
     else:      
         return Error

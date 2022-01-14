@@ -20,12 +20,38 @@
         <div x-show="inserimento">
           <div class="row">
             <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
-            <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+            <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
           </div>
       
           <br>
           {% csrf_token %}
-          {{ form }}
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.nome.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.nome}}
+            </div>
+          </div>  
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.idMisura.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.idMisura}}
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.fattoInCasa.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.fattoInCasa}}
+            </div>
+          </div>
+          <br>
           <br>
       
           
@@ -50,6 +76,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Nome</th>
+        <th scope="col">Misura</th>
         <th scope="col">Fatto in Casa</th>
         <th scope="col">Azioni</th>
       </tr>
@@ -62,6 +89,9 @@
             </th>
             <td>
               {{ ingrediente.nome }}
+            </td>
+            <td>
+              {{ ingrediente.idMisura }}
             </td>
             <td>
                 {% if ingrediente.fattoInCasa %} 

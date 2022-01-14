@@ -8,7 +8,32 @@
       
           <br>
           {% csrf_token %}
-          {{ form }}
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.nome.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.nome}}
+            </div>
+          </div>  
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.idMisura.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.idMisura}}
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.fattoInCasa.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.fattoInCasa}}
+            </div>
+          </div>
           <input type="hidden" value="{{ idIngrediente }}" name="idIngrediente">
           <br>
       

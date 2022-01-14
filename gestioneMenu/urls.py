@@ -13,4 +13,8 @@ urlpatterns = [
     path('modificaPiatto/', views.modificaPiatto, name='modificaPiatto'),
     path('applicaModifichePiatto', views.applicaModifichePiatto, name='applicaModifichePiatto'),
     path('eliminaPiatto/', views.eliminaPiatto, name='eliminaPiatto'),
+    path('nuovoIngredientePiatto/', views.nuovoIngredientePiatto, name='nuovoIngredientePiatto'),
+    path('modificaPiatto/', views.modificaPiatto, name='modificaPiatto'),
+    path('applicaModifichePiatto', views.applicaModifichePiatto, name='applicaModifichePiatto'),
+    path('eliminaPiatto/', views.eliminaPiatto, name='eliminaPiatto'),
 ]

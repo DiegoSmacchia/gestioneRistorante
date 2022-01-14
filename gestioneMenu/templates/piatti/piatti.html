@@ -18,8 +18,8 @@
   </ul>
   <br>
   <div class="tab-content" id="myTabContent">
+    <!-- PIATTI -->
     <div class="tab-pane fade show active" id="piatti" role="tabpanel">
-        <!-- PIATTI -->
         <div class="row">
           {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
@@ -37,7 +37,7 @@
                 
                     <br>
                     {% csrf_token %}
-                    {{ form }}
+                    {{ piattoform }}
                     <br>
                 
                     
@@ -115,7 +115,59 @@
               </tbody>
             </table>
     </div>
-    <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">ingpi...</div>
+    <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">
+      {% if permessiAzioni %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <form hx-post="{% url 'nuovoIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento">
+                <div x-data="{ inserimento: false }">
+                  <div class="row">
+                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Ingrediente di un Piatto</button>
+                  </div>
+                  
+                  <div x-show="inserimento">
+                    <div class="row">
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                    </div>
+                
+                    <br>
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{ingredientepiattoform.idPiatto.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{ingredientepiattoform.idPiatto}}
+                      </div>
+                    </div>  
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{ingredientepiattoform.idIngrediente.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{ingredientepiattoform.idIngrediente}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{ingredientepiattoform.quantita.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{ingredientepiattoform.quantita}}
+                      </div>
+                    </div>
+                    <br>
+                
+                    
+                  </div>
+                
+                </div>
+                </form>
+            </div>
+            {% endif %}
+    </div>
   </div>
 
 
