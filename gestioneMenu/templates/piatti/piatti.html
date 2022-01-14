@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block contentHead %}
-<link rel="stylesheet" href="{% static 'css/ingredienti.css' %}">
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -32,12 +32,45 @@
                   <div x-show="inserimento">
                     <div class="row">
                       <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
                     </div>
                 
                     <br>
                     {% csrf_token %}
-                    {{ piattoform }}
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{piattoform.nome.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{piattoform.nome}}
+                      </div>
+                    </div>  
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{piattoform.idCategoria.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{piattoform.idCategoria}}
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{piattoform.tempoPreparazione.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{piattoform.tempoPreparazione}}
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{piattoform.tempoCottura.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{piattoform.tempoCottura}}
+                      </div>
+                    </div>
                     <br>
                 
                     
@@ -50,9 +83,6 @@
             <div class="col-sm-12 col-md-6 col-lg-4">
               <div id="divModifica"></div>
             </div>
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <div id="divElimina"></div>
-            </div>
           </div>
           
           
@@ -62,9 +92,9 @@
                 <tr>
                   <th scope="col">#</th>
                   <th scope="col">Nome</th>
+                  <th scope="col">Categoria</th>
                   <th scope="col">Tempo Preparazione</th>
                   <th scope="col">Tempo Cottura</th>
-                  <th scope="col">Tempo Totale</th>
                   <th scope="col">Azioni</th>
                 </tr>
               </thead>
@@ -78,13 +108,13 @@
                           {{ piatto.nome }}
                       </td>
                       <td>
+                        {{ piatto.idCategoria }}
+                      </td>
+                      <td>
                           {{ piatto.tempoPreparazione}} Minuti
                       </td>
                       <td>
                           {{ piatto.tempoCottura}} Minuti
-                      </td>
-                      <td>
-                          {{ piatto.tempoTotale}} Minuti
                       </td>
                       <td>
                         <div class="row">
@@ -93,14 +123,14 @@
                             <form hx-post="{% url 'modificaPiatto' %}" hx-swap="outerHTML" hx-target="#divModifica">
                               <input type="hidden" value="{{piatto.id}}" name="idPiatto">
                               {% csrf_token %}
-                              <button type="submit"><i class="fas fa-edit"></i></button>
+                              <button type="submit"  class="buttonSubmit"><i class="fas fa-edit"></i></button>
                             </form>
                           </div>
                           <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'eliminaPiatto' %}" hx-swap="outerHTML" hx-target="#divElimina">
+                            <form hx-post="{% url 'eliminaPiatto' %}" hx-swap="outerHTML" hx-target="#divModifica">
                               <input type="hidden" value="{{piatto.id}}" name="idPiatto">
                               {% csrf_token %}
-                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto?')"><i class="fas fa-trash"></i></button>
+                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                             </form>
                           </div>
                           {% endif %}
@@ -115,7 +145,9 @@
               </tbody>
             </table>
     </div>
+    <!--Ingredienti Piatti-->
     <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">
+      <div class="row">
       {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
               <form hx-post="{% url 'nuovoIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento">
@@ -127,7 +159,7 @@
                   <div x-show="inserimento">
                     <div class="row">
                       <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
                     </div>
                 
                     <br>
@@ -167,6 +199,63 @@
                 </form>
             </div>
             {% endif %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <div id="divModificaIngredientePiatto"></div>
+            </div>
+          </div>
+            <table class="table table-primary">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Piatto</th>
+                  <th scope="col">Ingrediente</th>
+                  <th scope="col">Quantita</th>
+                  <th scope="col">Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for ingredientepiatto in ingredientipiatti %}
+                  <tr>
+                      <th scope="row">
+                        {{ ingredientepiatto.id}}
+                      </th>
+                      <td>
+                          {{ ingredientepiatto.idPiatto }}
+                      </td>
+                      <td>
+                          {{ ingredientepiatto.idIngrediente }}
+                      </td>
+                      <td>
+                          {{ ingredientepiatto.quantita }} 
+                      </td>
+                      <td>
+                        <div class="row">
+                          {% if permessiAzioni %}
+                          <div class="col-sm-6 col-md-3">
+                            <form hx-post="{% url 'modificaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divModificaIngredientePiatto">
+                              <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
+                              {% csrf_token %}
+                              <button type="submit"class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                            </form>
+                          </div>
+                          <div class="col-sm-6 col-md-3">
+                            <form hx-post="{% url 'eliminaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divModificaIngredientePiatto">
+                              <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
+                              {% csrf_token %}
+                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente del piatto?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                            </form>
+                          </div>
+                          {% endif %}
+          
+                        </div>
+                        
+                      </td>
+                  </tr>
+          
+                  {% endfor %}
+                
+              </tbody>
+            </table>
     </div>
   </div>
 

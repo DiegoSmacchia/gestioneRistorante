@@ -1,5 +1,5 @@
-<div id="divModifica">
-    <form hx-post="{% url 'applicaModifichePiatto' %}" hx-swap="outerHTML" class="formInserimento">
+<div id="divModificaIngredientePiatto">
+    <form hx-post="{% url 'applicaModificheIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento">
       
         <div>
           <div class="row">
@@ -10,39 +10,32 @@
           {% csrf_token %}
           <div class="row">
             <div class="col-sm-12 col-md-3">
-              {{form.nome.label}}
+              {{form.idPiatto.label}}
             </div>
             <div class="col-sm-12 col-md-9">
-              {{form.nome}}
+              {{form.idPiatto}}
             </div>
           </div>  
           <br>
           <div class="row">
             <div class="col-sm-12 col-md-3">
-              {{form.idCategoria.label}}
+              {{form.idIngrediente.label}}
             </div>
             <div class="col-sm-12 col-md-9">
-              {{form.idCategoria}}
+              {{form.idIngrediente}}
             </div>
           </div>
           <br>
           <div class="row">
             <div class="col-sm-12 col-md-3">
-              {{form.tempoPreparazione.label}}
+              {{form.quantita.label}}
             </div>
             <div class="col-sm-12 col-md-9">
-              {{form.tempoPreparazione}}
+              {{form.quantita}}
             </div>
           </div>
-          <div class="row">
-            <div class="col-sm-12 col-md-3">
-              {{form.tempoCottura.label}}
-            </div>
-            <div class="col-sm-12 col-md-9">
-              {{form.tempoCottura}}
-            </div>
-          </div>
-          <input type="hidden" value="{{ idPiatto }}" name="idPiatto">
+          <br>
+          <input type="hidden" value="{{ idIngredientePiatto }}" name="idIngredientePiatto">
           <br>
       
           

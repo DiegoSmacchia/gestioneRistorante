@@ -1,7 +1,7 @@
 <script>
     setTimeout(location.reload.bind(location), 2000);
 </script>
-<div x-data="{ open: true }" x-show="open" class="divSuccess">
-    <button @click="open = false" class="buttonClose"><i class="fas fa-times"></i></button>
+<div x-data="{ open: true }" x-show="open" class="divError">
+    <button @click="open = false" class="buttonCloseError"><i class="fas fa-times"></i></button>
     <span class="badge bg-danger">{{messaggio}}</span>
 </div>

@@ -1,0 +1,138 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#piatti" type="button" role="tab" aria-controls="home" aria-selected="true">Menu</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#ingredientiPiatti" type="button" role="tab" aria-controls="profile" aria-selected="false">Piatti non in menu</button>
+    </li>
+  </ul>
+  <br>
+  <div class="tab-content" id="myTabContent">
+    <!-- Menu -->
+    <div class="tab-pane fade show active" id="piatti" role="tabpanel">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <div id="divRimuoviPiattoMenu"></div>
+            </div>
+        </div>
+          <table class="table table-primary">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Piatto</th>
+                  <th scope="col">Descrizione</th>
+                  <th scope="col">Prezzo</th>
+                  <th scope="col">Azioni</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for piatto in menu %}
+                  <tr>
+                      <th scope="row">
+                        {{ piatto.id}}
+                      </th>
+                      <td>
+                          {{ piatto.idPiatto }}
+                      </td>
+                      <td>
+                          {{ piatto.descrizione}}
+                      </td>
+                      <td>
+                          {{ piatto.prezzo}} €
+                      </td>
+                      <td>
+                        <div class="row">
+                          {% if permessiAzioni %}
+                          <div class="col-sm-6 col-md-3">
+                            <form hx-post="{% url 'eliminaPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divRimuoviPiattoMenu">
+                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
+                              {% csrf_token %}
+                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto dal menu?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                            </form>
+                          </div>
+                          {% endif %}
+          
+                        </div>
+                        
+                      </td>
+                  </tr>
+          
+                  {% endfor %}
+                
+              </tbody>
+            </table>
+    </div>
+    <!--Piatti non in menù-->
+    <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">
+      <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <div id="divAggiungiPiattoMenu"></div>
+            </div>
+          </div>
+          <table class="table table-primary">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Categoria</th>
+                <th scope="col">Tempo Preparazione</th>
+                <th scope="col">Tempo Cottura</th>
+                <th scope="col">Azioni</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for piatto in piattiNonMenu %}
+                <tr>
+                    <th scope="row">
+                      {{ piatto.id}}
+                    </th>
+                    <td>
+                        {{ piatto.nome }}
+                    </td>
+                    <td>
+                      {{ piatto.idCategoria }}
+                    </td>
+                    <td>
+                        {{ piatto.tempoPreparazione}} Minuti
+                    </td>
+                    <td>
+                        {{ piatto.tempoCottura}} Minuti
+                    </td>
+                    <td>
+                      <div class="row">
+                        {% if permessiAzioni %}
+                        <div class="col-sm-6 col-md-3">
+                          <form hx-post="{% url 'aggiungiPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divAggiungiPiattoMenu">
+                            <input type="hidden" value="{{piatto.id}}" name="idPiatto">
+                            {% csrf_token %}
+                            <button type="submit"  class="buttonSubmit"><i class="fas fa-book-medical"></i></button>
+                          </form>
+                        </div>
+                        {% endif %}
+        
+                      </div>
+                      
+                    </td>
+                </tr>
+        
+                {% endfor %}
+              
+            </tbody>
+          </table>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}

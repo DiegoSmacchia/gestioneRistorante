@@ -16,10 +16,24 @@ input { padding-left: 2px;}
     border-radius: 10px;
     padding: 10px;
 }
-.buttonClose{
+.divError{
+    background-color: #cc1919;
+    border-radius: 10px;
+    padding: 10px;
+}
+.buttonCloseSuccess{
     width: 10%;
     border-radius: 50px;
     background-color: #198754;
+    border: 1px solid #f1f1f1;
+    position: relative;
+    top: 0;
+    right: 0;
+}
+.buttonCloseError{
+    width: 10%;
+    border-radius: 50px;
+    background-color: #cc1919;
     border: 1px solid #f1f1f1;
     position: relative;
     top: 0;
@@ -55,4 +69,8 @@ span{
     input{
         width: 100%;
     }
+}
+.buttonSubmit{
+    border:none;
+    background-color: #cfe2ff;
 }

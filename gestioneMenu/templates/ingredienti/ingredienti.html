@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block contentHead %}
-<link rel="stylesheet" href="{% static 'css/ingredienti.css' %}">
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -107,14 +107,14 @@
                   <form hx-post="{% url 'modificaIngrediente' %}" hx-swap="outerHTML" hx-target="#divModifica">
                     <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
                     {% csrf_token %}
-                    <button type="submit"><i class="fas fa-edit"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-swap="outerHTML" hx-target="#divElimina">
+                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-swap="outerHTML" hx-target="#divModifica">
                     <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')"><i class="fas fa-trash"></i></button>
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
 

@@ -1,5 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator
+from django.db.models.deletion import CASCADE
+from django.db.models.fields.related import ForeignKey
 
 class Misura(models.Model):
     nome = models.TextField(max_length=50)
@@ -8,6 +10,14 @@ class Misura(models.Model):
     class Meta:
         verbose_name = 'Misura'
         verbose_name_plural = 'Misure'
+
+class Categoria(models.Model):
+    nome = models.CharField(max_length=30)
+    def __str__(self):
+        return self.nome
+    class Meta:
+        verbose_name = 'Categoria'
+        verbose_name_plural = 'categorie'
 
 class Ingrediente(models.Model):
     nome = models.CharField(max_length=100)
@@ -21,7 +31,7 @@ class Ingrediente(models.Model):
 
 class Piatto(models.Model):
     nome = models.CharField(max_length=200)
-    tempoTotale = models.DecimalField(max_digits=15,decimal_places=2,validators=[MinValueValidator(0)])
+    idCategoria = ForeignKey(Categoria, on_delete=CASCADE)
     tempoPreparazione = models.DecimalField(max_digits=15,decimal_places=2,validators=[MinValueValidator(0)])
     tempoCottura = models.DecimalField(max_digits=15,decimal_places=2,validators=[MinValueValidator(0)])
     def __str__(self):
@@ -37,3 +47,13 @@ class IngredientePiatto(models.Model):
     class Meta:
         verbose_name = 'IngredientePiatto'
         verbose_name_plural = 'IngredientiPiatti'
+
+class Menu(models.Model):
+    idPiatto = models.ForeignKey(Piatto, on_delete=models.CASCADE)
+    descrizione = models.CharField(max_length=200)
+    prezzo = models.FloatField(validators=[MinValueValidator(0)])
+    def __str__(self):
+        return self.nome
+    class Meta:
+        verbose_name = 'Menu'
+        verbose_name_plural = 'Menu'

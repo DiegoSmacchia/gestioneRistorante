@@ -1,0 +1,43 @@
+<div id="divAggiungiPiattoMenu">
+    <form hx-post="{% url 'applicaAggiuntaMenu' %}" hx-swap="outerHTML" class="formInserimento">
+      
+        <div>
+          <div class="row">
+            <button type="submit" class="btn btn-success buttonAzione">Conferma Aggiunta</button>
+          </div>
+      
+          <br>
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.idPiatto.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              <p>{{ nomePiatto }}</p>
+            </div>
+          </div>  
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.descrizione.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.descrizione}}
+            </div>
+          </div>
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.prezzo.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.prezzo}}
+            </div>
+          </div>
+          <input type="hidden" value="{{ form.idPiatto.value }}" name="idPiatto">
+          <br>
+      
+          
+        </div>
+  </form>
+</div>
