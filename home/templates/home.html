@@ -17,6 +17,16 @@
             </a>
         </div>
        
+        
+        <div class="col-sm-12 col-md-6 col-lg-3 categoria">
+            <a href="{% url 'gestioneSala' %}">
+                <div class="contenutoCategoria">
+                    <i class="fas fa-store-alt fa-6x"></i>
+                    <p>Gestione Sala</p>
+                </div>
+            </a>
+        </div>
+
         {% if permessoAggiuntaUtente %}
             <div class="col-sm-12 col-md-6 col-lg-3 categoria">
                 <a href="{% url 'registrazione' %}">
@@ -27,7 +37,6 @@
                 </a>
             </div>
         {% endif %}
-        <div class="col-sm-12 col-md-6 col-lg-3 categoria"><div class="contenutoCategoria">aaa</div></div>
         <div class="col-sm-12 col-md-6 col-lg-3 categoria"><div class="contenutoCategoria">aaa</div></div>
     </div>
 </div>

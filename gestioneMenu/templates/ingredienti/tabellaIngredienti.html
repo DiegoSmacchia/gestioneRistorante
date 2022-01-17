@@ -1,0 +1,58 @@
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Misura</th>
+        <th scope="col">Fatto in Casa</th>
+        {% if permessiAzioni %}
+        <th scope="col">Azioni</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for ingrediente in ingredienti %}
+        <tr>
+            <th scope="row">
+              {{ ingrediente.id}}
+            </th>
+            <td>
+              {{ ingrediente.nome }}
+            </td>
+            <td>
+              {{ ingrediente.idMisura }}
+            </td>
+            <td>
+                {% if ingrediente.fattoInCasa %} 
+                Sì
+                {% else %}
+                No
+                {% endif %}
+            </td>
+            {% if permessiAzioni %}
+            <td>
+              <div class="row">
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaIngrediente' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                    <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
+                    {% csrf_token %}
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                    <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+
+              </div>
+            </td>
+            {% endif %} 
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>

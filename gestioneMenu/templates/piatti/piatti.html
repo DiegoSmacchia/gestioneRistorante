@@ -20,10 +20,15 @@
   <div class="tab-content" id="myTabContent">
     <!-- PIATTI -->
     <div class="tab-pane fade show active" id="piatti" role="tabpanel">
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div id="divNotifica"></div>
+        </div>
+      </div>
         <div class="row">
           {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoPiatto' %}" hx-swap="outerHTML" class="formInserimento">
+              <form hx-post="{% url 'nuovoPiatto' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotifica">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Piatto</button>
@@ -31,8 +36,8 @@
                   
                   <div x-show="inserimento">
                     <div class="row">
-                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
                     </div>
                 
                     <br>
@@ -80,77 +85,24 @@
                 </form>
             </div>
             {% endif %}
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <div id="divModifica"></div>
-            </div>
           </div>
           
-          
-          
-          <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Nome</th>
-                  <th scope="col">Categoria</th>
-                  <th scope="col">Tempo Preparazione</th>
-                  <th scope="col">Tempo Cottura</th>
-                  <th scope="col">Azioni</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {% for piatto in piatti %}
-                  <tr>
-                      <th scope="row">
-                        {{ piatto.id}}
-                      </th>
-                      <td>
-                          {{ piatto.nome }}
-                      </td>
-                      <td>
-                        {{ piatto.idCategoria }}
-                      </td>
-                      <td>
-                          {{ piatto.tempoPreparazione}} Minuti
-                      </td>
-                      <td>
-                          {{ piatto.tempoCottura}} Minuti
-                      </td>
-                      <td>
-                        <div class="row">
-                          {% if permessiAzioni %}
-                          <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'modificaPiatto' %}" hx-swap="outerHTML" hx-target="#divModifica">
-                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
-                              {% csrf_token %}
-                              <button type="submit"  class="buttonSubmit"><i class="fas fa-edit"></i></button>
-                            </form>
-                          </div>
-                          <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'eliminaPiatto' %}" hx-swap="outerHTML" hx-target="#divModifica">
-                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
-                              {% csrf_token %}
-                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
-                            </form>
-                          </div>
-                          {% endif %}
-          
-                        </div>
-                        
-                      </td>
-                  </tr>
-          
-                  {% endfor %}
-                
-              </tbody>
-            </table>
+          <div hx-get="{% url 'tabellaPiatti' %}" hx-trigger="every 1s">
+            <div class="loader"></div>
+          </div>  
+        
     </div>
     <!--Ingredienti Piatti-->
     <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">
       <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div id="divNotificaIngredientePiatto"></div>
+        </div>
+      </div>
+      <div class="row">
       {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento">
+              <form hx-post="{% url 'nuovoIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotificaIngredientePiatto">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Ingrediente di un Piatto</button>
@@ -158,8 +110,8 @@
                   
                   <div x-show="inserimento">
                     <div class="row">
-                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false" x-show="inserimento">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
                     </div>
                 
                     <br>
@@ -199,63 +151,13 @@
                 </form>
             </div>
             {% endif %}
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <div id="divModificaIngredientePiatto"></div>
-            </div>
           </div>
-            <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Piatto</th>
-                  <th scope="col">Ingrediente</th>
-                  <th scope="col">Quantita</th>
-                  <th scope="col">Azioni</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {% for ingredientepiatto in ingredientipiatti %}
-                  <tr>
-                      <th scope="row">
-                        {{ ingredientepiatto.id}}
-                      </th>
-                      <td>
-                          {{ ingredientepiatto.idPiatto }}
-                      </td>
-                      <td>
-                          {{ ingredientepiatto.idIngrediente }}
-                      </td>
-                      <td>
-                          {{ ingredientepiatto.quantita }} 
-                      </td>
-                      <td>
-                        <div class="row">
-                          {% if permessiAzioni %}
-                          <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'modificaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divModificaIngredientePiatto">
-                              <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
-                              {% csrf_token %}
-                              <button type="submit"class="buttonSubmit"><i class="fas fa-edit"></i></button>
-                            </form>
-                          </div>
-                          <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'eliminaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divModificaIngredientePiatto">
-                              <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
-                              {% csrf_token %}
-                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente del piatto?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
-                            </form>
-                          </div>
-                          {% endif %}
-          
-                        </div>
-                        
-                      </td>
-                  </tr>
-          
-                  {% endfor %}
-                
-              </tbody>
-            </table>
+
+          <div hx-get="{% url 'tabellaIngredientiPiatti' %}" hx-trigger="every 1s">
+            <div class="loader"></div>
+          </div>
+
+
     </div>
   </div>
 

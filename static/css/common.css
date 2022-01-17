@@ -10,7 +10,6 @@ a, a:hover{
 }
 .contenutoCategoria{
     padding: 10px;
-    background: rgb(2,0,36);
     background-color: rgb(30,109,255);
     border: 1px solid black;
     border-radius: 10px;
@@ -34,3 +33,25 @@ a, a:hover{
     border:none;
     background-color: rgb(30,109,255);
 }
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #0d6efd;
+    margin: auto;
+    padding: 10px;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

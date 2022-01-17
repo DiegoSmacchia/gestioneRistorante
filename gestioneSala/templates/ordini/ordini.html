@@ -1,0 +1,25 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/ordini.css' %}">
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        {% for tavolo in tavoli %}
+            <a href="{% url 'gestioneOrdine' tavolo.id %}">
+
+                <div  class="col-sm-12 col-md-6 col-lg-3 categoria">
+                    <button type="submit" {% if tavolo in tavoliordinato %} class="contenutoCategoria ordinato" {% else %} class="contenutoCategoria" {% endif %}>
+                        <i class="fas fa-file-alt fa-4x"></i>
+                        <p>Tavolo {{tavolo.nome}}</p>
+                    </button>
+                </div>
+            </a>  
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

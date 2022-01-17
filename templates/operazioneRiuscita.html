@@ -1,7 +1,4 @@
-<script>
-    setTimeout(location.reload.bind(location), 2000);
-</script>
-<div x-data="{ open: true }" x-show="open" class="divSuccess">
+<div x-data="{ open: true }" x-show="open" class="divSuccess" id="{{idDiv}}">
     <button @click="open = false" class="buttonCloseSuccess"><i class="fas fa-times"></i></button>
     <span class="badge bg-success">{{messaggio}}</span>
 </div>

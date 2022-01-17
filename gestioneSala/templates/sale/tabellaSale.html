@@ -1,0 +1,49 @@
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        {% if permessiAzioni %}
+          <th scope="col">Azioni</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for sala in sale %}
+        <tr>
+            <th scope="row">
+              {{ sala.id}}
+            </th>
+            <td>
+                {{ sala.nome }}
+            </td>
+            {% if permessiAzioni %}
+            <td>
+              <div class="row">
+                
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaSala' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                    <input type="hidden" value="{{sala.id}}" name="idSala">
+                    {% csrf_token %}
+                    <button type="submit"  class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaSala' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                    <input type="hidden" value="{{sala.id}}" name="idSala">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa sala?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+                
+
+              </div>
+              
+            </td>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>

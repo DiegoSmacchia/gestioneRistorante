@@ -1,0 +1,13 @@
+.ordinato{
+    background-color: blueviolet;
+    transition: background-color 0.5s ease-out;
+}
+.ordinato:hover{
+    background-color: rgb(190, 121, 255);
+}
+button{
+    padding: 10px;
+}
+.titolo{
+    font-weight: bold;
+}

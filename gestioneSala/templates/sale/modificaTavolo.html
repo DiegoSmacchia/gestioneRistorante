@@ -1,0 +1,32 @@
+<div id="divModifica">
+    <form hx-post="{% url 'applicaModificheTavolo' %}" hx-swap="outerHTML" class="formInserimento">
+      
+        <div>
+          <div class="row">
+            <button type="submit" class="btn btn-success buttonAzione">Conferma Modifica</button>
+          </div>
+      
+          <br>
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.idSala.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.idSala}}
+            </div>
+          </div>  
+          <br>
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.nome.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.nome}}
+            </div>
+          </div>  
+            <input type="hidden" value="{{ idTavolo }}" name="idTavolo">
+          <br>  
+        </div>
+  </form>
+</div>

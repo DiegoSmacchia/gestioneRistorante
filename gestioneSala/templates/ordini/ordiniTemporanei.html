@@ -1,0 +1,52 @@
+<div id="divComponenteTemporaneo">
+    {% if componentitemporanei %}
+    <hr>
+    <p class="titolo">Da confermare:</p>
+    <table class="table table-primary">
+        <thead>
+          <tr>
+            <th scope="col">Piatto</th>
+            <th scope="col">Quantità</th>
+            <th scope="col">Uscita</th>
+            <th scope="col">Variazioni</th>
+            <th scope="col">Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for componente in componentitemporanei %}
+            <tr>
+                <td>
+                    {{componente.idPiatto}}
+                </td>
+                <td>
+                    {{componente.quantita}}
+                </td>
+                <td>
+                    {{componente.uscita}}
+                </td>
+                <td>
+                    {{componente.variazioni}}
+                </td>
+                <td>
+                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-swap="outerHTML" hx-target="#divComponenteTemporaneo">
+                        <input type="hidden" value="{{componente.id}}" name="idComponente">
+                        <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
+                        {% csrf_token %}
+                        <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                      </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <form hx-post="{% url 'confermaAggiuntaComponenti' %}">
+                {% csrf_token %}
+                <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
+                <button type="submit" class="btn btn-success buttonAzione" >Conferma</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>

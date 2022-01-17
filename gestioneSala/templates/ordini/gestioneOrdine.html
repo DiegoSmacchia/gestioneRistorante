@@ -1,0 +1,181 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4">
+        <div id="divModificaComponente"></div>
+    </div>
+</div>
+
+{% if componenti %}
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">Piatto</th>
+        <th scope="col">Quantità</th>
+        <th scope="col">Uscita</th>
+        <th scope="col">Variazioni</th>
+        <th scope="col">Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for componente in componenti %}
+        
+        <tr>
+            <td>
+              {{ componente.idPiatto}}
+            </td>
+            <td>
+              {{ componente.quantita }}
+            </td>
+            <td>
+              {{ componente.uscita }}
+            </td>
+            <td>
+              {{componente.variazioni}}
+            </td>
+            <td>
+              <div class="row">
+                  
+                <div class="col-sm-6 col-md-3">
+                    <form hx-post="{% url 'modificaComponenteOrdine' %}" hx-swap="outerHTML" hx-target="#divModificaComponente">
+                      <input type="hidden" value="{{componente.id}}" name="idComponente">
+                      {% csrf_token %}
+                      <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                    </form>
+                  </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-swap="outerHTML" hx-target="#divModificaComponente">
+                    <input type="hidden" value="{{componente.id}}" name="idComponente">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+              </div>              
+              
+            </td>
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>
+{% else %}
+nessun Ordine confermato.
+<br>
+{% endif %}
+
+<div id="divComponenteTemporaneo">
+    {% if componentitemporanei %}
+    <hr>
+    <p class="titolo">Da confermare:</p>
+    <table class="table table-primary">
+        <thead>
+          <tr>
+            <th scope="col">Piatto</th>
+            <th scope="col">Quantità</th>
+            <th scope="col">Uscita</th>
+            <th scope="col">Variazioni</th>
+            <th scope="col">Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for componente in componentitemporanei %}
+            <tr>
+                <td>
+                    {{componente.idPiatto}}
+                </td>
+                <td>
+                    {{componente.quantita}}
+                </td>
+                <td>
+                    {{componente.uscita}}
+                </td>
+                <td>
+                    {{componente.variazioni}}
+                </td>
+                <td>
+                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-swap="outerHTML" hx-target="#divComponenteTemporaneo">
+                        <input type="hidden" value="{{componente.id}}" name="idComponente">
+                        <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
+                        {% csrf_token %}
+                        <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                      </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-sm-6 col-md-3">
+            <form hx-post="{% url 'confermaAggiuntaComponenti' %}">
+                {% csrf_token %}
+                <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
+                <button type="submit" class="btn btn-success buttonAzione" >Conferma</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<hr>
+<p class="titolo">Aggiunta componenti:</p>
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">Piatto</th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Prezzo</th>
+        <th scope="col">Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for piatto in piatti %}
+        <tr>
+            <td>
+                {{ piatto.idPiatto }}
+            </td>
+            <td>
+                {{ piatto.idPiatto.idCategoria }}
+            </td>
+            <td>
+                {{ piatto.prezzo}}€
+            </td>
+            <td>
+                
+                <form hx-post="{% url 'aggiungiComponenteTemporaneo' %}" hx-swap="outerHTML" hx-target="#divComponenteTemporaneo">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-3">
+                            <label>Quantità: </label>
+                            <input type="number" min="0" step="0.5" name="quantita" required>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <label>Uscita: </label>
+                        <input type="number" min="1" step="1" name="uscita" required>
+                        </div>
+                        <div class="col-sm-12 col-md-3">
+                            <label>Variazioni: </label>
+                        <input type="text" name="variazioni">
+                        </div>
+                        <input type="hidden" value="{{piatto.idPiatto.id}}" name="idPiatto"> 
+                        <input type="hidden" value="{{tavolo}}" name="idTavolo"> 
+                        {% csrf_token %}
+                        <div class="col-sm-12 col-md-3">
+                            <button type="submit"  class="buttonSubmit"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>        
+                </form>
+            </td>
+            
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>
+{% endblock %}

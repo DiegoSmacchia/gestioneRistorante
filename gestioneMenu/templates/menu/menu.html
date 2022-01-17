@@ -22,113 +22,26 @@
     <div class="tab-pane fade show active" id="piatti" role="tabpanel">
         <div class="row">
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <div id="divRimuoviPiattoMenu"></div>
+              <div id="divNotifica"></div>
             </div>
         </div>
-          <table class="table table-primary">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Piatto</th>
-                  <th scope="col">Descrizione</th>
-                  <th scope="col">Prezzo</th>
-                  <th scope="col">Azioni</th>
-                </tr>
-              </thead>
-              <tbody>
-                  {% for piatto in menu %}
-                  <tr>
-                      <th scope="row">
-                        {{ piatto.id}}
-                      </th>
-                      <td>
-                          {{ piatto.idPiatto }}
-                      </td>
-                      <td>
-                          {{ piatto.descrizione}}
-                      </td>
-                      <td>
-                          {{ piatto.prezzo}} €
-                      </td>
-                      <td>
-                        <div class="row">
-                          {% if permessiAzioni %}
-                          <div class="col-sm-6 col-md-3">
-                            <form hx-post="{% url 'eliminaPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divRimuoviPiattoMenu">
-                              <input type="hidden" value="{{piatto.id}}" name="idPiatto">
-                              {% csrf_token %}
-                              <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto dal menu?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
-                            </form>
-                          </div>
-                          {% endif %}
-          
-                        </div>
-                        
-                      </td>
-                  </tr>
-          
-                  {% endfor %}
-                
-              </tbody>
-            </table>
+        
+        <div hx-get="{% url 'tabellaMenu' %}" hx-trigger="every 1s">
+          <div class="loader"></div>
+        </div> 
+
     </div>
     <!--Piatti non in menù-->
     <div class="tab-pane fade" id="ingredientiPiatti" role="tabpanel">
       <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <div id="divAggiungiPiattoMenu"></div>
-            </div>
-          </div>
-          <table class="table table-primary">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nome</th>
-                <th scope="col">Categoria</th>
-                <th scope="col">Tempo Preparazione</th>
-                <th scope="col">Tempo Cottura</th>
-                <th scope="col">Azioni</th>
-              </tr>
-            </thead>
-            <tbody>
-                {% for piatto in piattiNonMenu %}
-                <tr>
-                    <th scope="row">
-                      {{ piatto.id}}
-                    </th>
-                    <td>
-                        {{ piatto.nome }}
-                    </td>
-                    <td>
-                      {{ piatto.idCategoria }}
-                    </td>
-                    <td>
-                        {{ piatto.tempoPreparazione}} Minuti
-                    </td>
-                    <td>
-                        {{ piatto.tempoCottura}} Minuti
-                    </td>
-                    <td>
-                      <div class="row">
-                        {% if permessiAzioni %}
-                        <div class="col-sm-6 col-md-3">
-                          <form hx-post="{% url 'aggiungiPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divAggiungiPiattoMenu">
-                            <input type="hidden" value="{{piatto.id}}" name="idPiatto">
-                            {% csrf_token %}
-                            <button type="submit"  class="buttonSubmit"><i class="fas fa-book-medical"></i></button>
-                          </form>
-                        </div>
-                        {% endif %}
-        
-                      </div>
-                      
-                    </td>
-                </tr>
-        
-                {% endfor %}
-              
-            </tbody>
-          </table>
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div id="divNotificaPiattiNonMenu"></div>
+        </div>
+      </div>
+
+      <div hx-get="{% url 'tabellaNonMenu' %}" hx-trigger="every 1s">
+        <div class="loader"></div>
+      </div> 
     </div>
   </div>
 

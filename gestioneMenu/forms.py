@@ -1,5 +1,3 @@
-from django import forms
-from django.core.validators import MinValueValidator
 from django.forms.models import ModelForm
 
 from gestioneMenu.models import IngredientePiatto, Ingrediente, Menu, Piatto

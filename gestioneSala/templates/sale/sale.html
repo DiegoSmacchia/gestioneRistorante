@@ -1,0 +1,124 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#sale" type="button" role="tab" aria-controls="home" aria-selected="true">Sale</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#tavoli" type="button" role="tab" aria-controls="profile" aria-selected="false">Tavoli</button>
+    </li>
+  </ul>
+  <br>
+  <div class="tab-content" id="myTabContent">
+    <!-- Sale -->
+    <div class="tab-pane fade show active" id="sale" role="tabpanel">
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div id="divNotifica"></div>
+        </div>
+      </div>
+
+        <div class="row">
+          {% if permessiAzioni %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <form hx-post="{% url 'nuovaSala' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotifica">
+                <div x-data="{ inserimento: false }">
+                  <div class="row">
+                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuova Sala</button>
+                  </div>
+                  
+                  <div x-show="inserimento">
+                    <div class="row">
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                    </div>
+                
+                    <br>
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{salaform.nome.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{salaform.nome}}
+                      </div>
+                    </div>  
+                    <br>
+                  </div>               
+                </div>
+                </form>
+            </div>
+            {% endif %}
+          </div>
+          
+          
+          <div hx-get="{% url 'tabellaSale' %}" hx-trigger="every 1s">
+            <div class="loader"></div>
+          </div> 
+          
+    </div>
+    <!--Tavoli-->
+    <div class="tab-pane fade" id="tavoli" role="tabpanel">
+      <div class="row">
+        <div class="col-sm-12 col-md-6 col-lg-4">
+          <div id="divNotificaTavolo"></div>
+        </div>
+      </div>
+      <div class="row">
+      {% if permessiAzioni %}
+            <div class="col-sm-12 col-md-6 col-lg-4">
+              <form hx-post="{% url 'nuovoTavolo' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotificaTavolo">
+                <div x-data="{ inserimento: false }">
+                  <div class="row">
+                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Tavolo</button>
+                  </div>
+                  
+                  <div x-show="inserimento">
+                    <div class="row">
+                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
+                      <button type="submit" class="btn btn-success buttonAzione" @click="inserimento = false">Conferma Inserimento</button>
+                    </div>
+                
+                    <br>
+                    {% csrf_token %}
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{tavoloform.idSala.label}}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{tavoloform.idSala}}
+                      </div>
+                    </div>  
+                    <br>
+                    <div class="row">
+                      <div class="col-sm-12 col-md-3">
+                        {{ tavoloform.nome.label }}
+                      </div>
+                      <div class="col-sm-12 col-md-9">
+                        {{ tavoloform.nome }}
+                      </div>
+                    </div>
+                    <br>
+                  </div>
+                
+                </div>
+                </form>
+            </div>
+      {% endif %}
+      </div>
+
+      <div hx-get="{% url 'tabellaTavoli' %}" hx-trigger="every 1s">
+        <div class="loader"></div>
+      </div> 
+            
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,54 @@
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Piatto</th>
+        <th scope="col">Ingrediente</th>
+        <th scope="col">Quantita</th>
+        {% if permessiAzioni %}
+          <th scope="col">Azioni</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for ingredientepiatto in ingredientipiatti %}
+        <tr>
+            <th scope="row">
+              {{ ingredientepiatto.id}}
+            </th>
+            <td>
+                {{ ingredientepiatto.idPiatto }}
+            </td>
+            <td>
+                {{ ingredientepiatto.idIngrediente }}
+            </td>
+            <td>
+                {{ ingredientepiatto.quantita }} 
+            </td>
+            {% if permessiAzioni %}
+            <td>
+              <div class="row">
+                
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divNotificaIngredientePiatto">
+                    <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
+                    {% csrf_token %}
+                    <button type="submit"class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaIngredientePiatto' %}" hx-swap="outerHTML" hx-target="#divNotificaIngredientePiatto">
+                    <input type="hidden" value="{{ingredientepiatto.id}}" name="idIngredientePiatto">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente del piatto?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+              </div>
+            </td>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>

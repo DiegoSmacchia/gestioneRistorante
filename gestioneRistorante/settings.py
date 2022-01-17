@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'home.apps.HomeConfig',
     'gestioneUtenti.apps.GestioneutentiConfig',
-    'gestioneMenu.apps.GestionemenuConfig'
+    'gestioneMenu.apps.GestionemenuConfig',
+    'gestioneSala.apps.GestionesalaConfig'
 ]
 
 LOGIN_URL = 'login'

@@ -52,8 +52,6 @@ class Menu(models.Model):
     idPiatto = models.ForeignKey(Piatto, on_delete=models.CASCADE)
     descrizione = models.CharField(max_length=200)
     prezzo = models.FloatField(validators=[MinValueValidator(0)])
-    def __str__(self):
-        return self.nome
     class Meta:
         verbose_name = 'Menu'
         verbose_name_plural = 'Menu'

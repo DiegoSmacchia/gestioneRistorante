@@ -1,0 +1,53 @@
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Sala</th>
+        <th scope="col">Nome</th>
+        {% if permessiAzioni %}
+          <th scope="col">Azioni</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for tavolo in tavoli %}
+        <tr>
+            <th scope="row">
+              {{ tavolo.id }}
+            </th>
+            <td>
+                {{ tavolo.idSala }}
+            </td>
+            <td>
+                {{ tavolo.nome }}
+            </td>
+            {% if permessiAzioni %}
+            <td>
+              <div class="row">
+                
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaTavolo' %}" hx-swap="outerHTML" hx-target="#divModificaTavolo">
+                    <input type="hidden" value="{{tavolo.id}}" name="idTavolo">
+                    {% csrf_token %}
+                    <button type="submit"class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaTavolo' %}" hx-swap="outerHTML" hx-target="#divModificaTavolo">
+                    <input type="hidden" value="{{tavolo.id}}" name="idTavolo">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo tavolo?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+                
+
+              </div>
+              
+            </td>
+            {% endif %}
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>
