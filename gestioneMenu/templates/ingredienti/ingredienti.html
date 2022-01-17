@@ -15,7 +15,7 @@
 <div class="row">
   {% if permessiAzioni %}
   <div class="col-sm-12 col-md-6 col-lg-4">
-    <form hx-post="{% url 'nuovoIngrediente' %}" hx-swap="outerHTML" hx-target="#divNotifica" class="formInserimento">
+    <form hx-post="{% url 'nuovoIngrediente' %}" hx-target="#divNotifica" class="formInserimento">
       <div x-data="{ inserimento: false }">
         <div class="row">
           <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Ingrediente</button>

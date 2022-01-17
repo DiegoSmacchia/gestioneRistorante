@@ -28,7 +28,7 @@
         <div class="row">
           {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoPiatto' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotifica">
+              <form hx-post="{% url 'nuovoPiatto' %}" class="formInserimento" hx-target="#divNotifica">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Piatto</button>
@@ -102,7 +102,7 @@
       <div class="row">
       {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoIngredientePiatto' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotificaIngredientePiatto">
+              <form hx-post="{% url 'nuovoIngredientePiatto' %}" class="formInserimento" hx-target="#divNotificaIngredientePiatto">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Ingrediente di un Piatto</button>

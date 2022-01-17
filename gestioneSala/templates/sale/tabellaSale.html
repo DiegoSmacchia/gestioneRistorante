@@ -22,14 +22,14 @@
               <div class="row">
                 
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'modificaSala' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                  <form hx-post="{% url 'modificaSala' %}" hx-target="#divNotifica">
                     <input type="hidden" value="{{sala.id}}" name="idSala">
                     {% csrf_token %}
                     <button type="submit"  class="buttonSubmit"><i class="fas fa-edit"></i></button>
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaSala' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                  <form hx-post="{% url 'eliminaSala' %}" hx-target="#divNotifica">
                     <input type="hidden" value="{{sala.id}}" name="idSala">
                     {% csrf_token %}
                     <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa sala?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>

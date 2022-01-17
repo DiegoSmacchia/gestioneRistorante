@@ -30,7 +30,7 @@
               <div class="row">
                 
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                  <form hx-post="{% url 'eliminaPiattoMenu' %}" hx-target="#divNotifica">
                     <input type="hidden" value="{{piatto.id}}" name="idPiatto">
                     {% csrf_token %}
                     <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto dal menu?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>

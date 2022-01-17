@@ -43,14 +43,14 @@
               <div class="row">
                   
                 <div class="col-sm-6 col-md-3">
-                    <form hx-post="{% url 'modificaComponenteOrdine' %}" hx-swap="outerHTML" hx-target="#divModificaComponente">
+                    <form hx-post="{% url 'modificaComponenteOrdine' %}" hx-target="#divModificaComponente">
                       <input type="hidden" value="{{componente.id}}" name="idComponente">
                       {% csrf_token %}
                       <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
                     </form>
                   </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-swap="outerHTML" hx-target="#divModificaComponente">
+                  <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-target="#divModificaComponente">
                     <input type="hidden" value="{{componente.id}}" name="idComponente">
                     {% csrf_token %}
                     <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
@@ -100,7 +100,7 @@ nessun Ordine confermato.
                     {{componente.variazioni}}
                 </td>
                 <td>
-                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-swap="outerHTML" hx-target="#divComponenteTemporaneo">
+                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-target="#divComponenteTemporaneo">
                         <input type="hidden" value="{{componente.id}}" name="idComponente">
                         <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
                         {% csrf_token %}
@@ -148,7 +148,7 @@ nessun Ordine confermato.
             </td>
             <td>
                 
-                <form hx-post="{% url 'aggiungiComponenteTemporaneo' %}" hx-swap="outerHTML" hx-target="#divComponenteTemporaneo">
+                <form hx-post="{% url 'aggiungiComponenteTemporaneo' %}" hx-target="#divComponenteTemporaneo">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
                             <label>Quantità: </label>

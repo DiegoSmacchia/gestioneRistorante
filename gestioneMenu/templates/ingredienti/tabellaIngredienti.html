@@ -33,14 +33,14 @@
             <td>
               <div class="row">
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'modificaIngrediente' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                  <form hx-post="{% url 'modificaIngrediente' %}" hx-target="#divNotifica">
                     <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
                     {% csrf_token %}
                     <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-swap="outerHTML" hx-target="#divNotifica">
+                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-target="#divNotifica">
                     <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
                     {% csrf_token %}
                     <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>

@@ -34,7 +34,7 @@
               <div class="row">
                 
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'aggiungiPiattoMenu' %}" hx-swap="outerHTML" hx-target="#divNotificaPiattiNonMenu">
+                  <form hx-post="{% url 'aggiungiPiattoMenu' %}" hx-target="#divNotificaPiattiNonMenu">
                     <input type="hidden" value="{{piatto.id}}" name="idPiatto">
                     {% csrf_token %}
                     <button type="submit"  class="buttonSubmit"><i class="fas fa-book-medical"></i></button>

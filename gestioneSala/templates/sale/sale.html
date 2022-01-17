@@ -29,7 +29,7 @@
         <div class="row">
           {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovaSala' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotifica">
+              <form hx-post="{% url 'nuovaSala' %}" class="formInserimento" hx-target="#divNotifica">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuova Sala</button>
@@ -75,7 +75,7 @@
       <div class="row">
       {% if permessiAzioni %}
             <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoTavolo' %}" hx-swap="outerHTML" class="formInserimento" hx-target="#divNotificaTavolo">
+              <form hx-post="{% url 'nuovoTavolo' %}" class="formInserimento" hx-target="#divNotificaTavolo">
                 <div x-data="{ inserimento: false }">
                   <div class="row">
                     <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Tavolo</button>
