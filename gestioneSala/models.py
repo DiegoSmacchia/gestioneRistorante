@@ -1,3 +1,4 @@
+from time import time
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.core.validators import MinValueValidator
@@ -34,6 +35,7 @@ class Ordine(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
     stato = models.ForeignKey(Stato, on_delete=CASCADE)
     uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
+    orario = models.TimeField(null=True)
     class Meta:
         verbose_name = 'Ordine'
         verbose_name_plural = 'Ordini'
@@ -52,6 +54,7 @@ class OrdineTemporaneo(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
     stato = models.ForeignKey(Stato, on_delete=CASCADE)
     uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
+    orario = models.TimeField(null=True)
     class Meta:
         verbose_name = 'OrdineTemporaneo'
         verbose_name_plural = 'OrdiniTemporanei'

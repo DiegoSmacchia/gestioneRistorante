@@ -16,6 +16,7 @@ urlpatterns = [
     path('eliminaTavolo/', views.eliminaTavolo, name='eliminaTavolo'),
     path('ordini', views.ordini, name = 'ordini'),
     path('gestioneOrdine/<int:idTavolo>', views.gestioneOrdine, name = 'gestioneOrdine'),
+    path('tabellaOrdini/<int:idTavolo>', views.tabellaOrdini, name='tabellaOrdini'),
     path('aggiungiComponenteTemporaneo', views.aggiungiComponenteTemporaneo, name='aggiungiComponenteTemporaneo'),
     path('confermaAggiuntaComponenti', views.confermaAggiuntaComponenti, name ='confermaAggiuntaComponenti'),
     path('eliminaComponenteTemporaneo', views.eliminaComponenteTemporaneo, name ='eliminaComponenteTemporaneo'),

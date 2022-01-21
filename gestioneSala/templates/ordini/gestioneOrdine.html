@@ -12,63 +12,66 @@
     </div>
 </div>
 
-{% if componenti %}
-<table class="table table-primary">
-    <thead>
-      <tr>
-        <th scope="col">Piatto</th>
-        <th scope="col">Quantità</th>
-        <th scope="col">Uscita</th>
-        <th scope="col">Variazioni</th>
-        <th scope="col">Azioni</th>
-      </tr>
-    </thead>
-    <tbody>
-        {% for componente in componenti %}
-        
+<div hx-get="{% url 'tabellaOrdini' tavolo %}" hx-trigger="every 1s">
+  {% if componenti %}
+  <table class="table table-primary">
+      <thead>
         <tr>
-            <td>
-              {{ componente.idPiatto}}
-            </td>
-            <td>
-              {{ componente.quantita }}
-            </td>
-            <td>
-              {{ componente.uscita }}
-            </td>
-            <td>
-              {{componente.variazioni}}
-            </td>
-            <td>
-              <div class="row">
-                  
-                <div class="col-sm-6 col-md-3">
-                    <form hx-post="{% url 'modificaComponenteOrdine' %}" hx-target="#divModificaComponente">
+          <th scope="col">Piatto</th>
+          <th scope="col">Quantità</th>
+          <th scope="col">Uscita</th>
+          <th scope="col">Variazioni</th>
+          <th scope="col">Azioni</th>
+        </tr>
+      </thead>
+      <tbody>
+          {% for componente in componenti %}
+          
+          <tr>
+              <td>
+                {{ componente.idPiatto}}
+              </td>
+              <td>
+                {{ componente.quantita }}
+              </td>
+              <td>
+                {{ componente.uscita }}
+              </td>
+              <td>
+                {{componente.variazioni}}
+              </td>
+              <td>
+                <div class="row">
+                    
+                  <div class="col-sm-6 col-md-3">
+                      <form hx-post="{% url 'modificaComponenteOrdine' %}" hx-target="#divModificaComponente">
+                        <input type="hidden" value="{{componente.id}}" name="idComponente">
+                        {% csrf_token %}
+                        <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                      </form>
+                    </div>
+                  <div class="col-sm-6 col-md-3">
+                    <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-target="#divModificaComponente">
                       <input type="hidden" value="{{componente.id}}" name="idComponente">
                       {% csrf_token %}
-                      <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                      <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                     </form>
                   </div>
-                <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-target="#divModificaComponente">
-                    <input type="hidden" value="{{componente.id}}" name="idComponente">
-                    {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
-                  </form>
-                </div>
-              </div>              
-              
-            </td>
-        </tr>
+                </div>              
+                
+              </td>
+          </tr>
+  
+          {% endfor %}
+        
+      </tbody>
+    </table>
+  {% else %}
+  nessun Ordine confermato.
+  <br>
+  {% endif %}
 
-        {% endfor %}
-      
-    </tbody>
-  </table>
-{% else %}
-nessun Ordine confermato.
-<br>
-{% endif %}
+
 
 <div id="divComponenteTemporaneo">
     {% if componentitemporanei %}
@@ -122,6 +125,9 @@ nessun Ordine confermato.
     </div>
     {% endif %}
 </div>
+
+</div>
+
 
 <hr>
 <p class="titolo">Aggiunta componenti:</p>

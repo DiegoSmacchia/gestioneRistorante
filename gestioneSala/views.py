@@ -1,4 +1,5 @@
 from aifc import Error
+from datetime import datetime
 from multiprocessing import Lock
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -179,6 +180,27 @@ def gestioneOrdine(request, idTavolo):
         return Error
 
 @login_required
+def tabellaOrdini(request, idTavolo):
+        try:
+            ordine = Ordine.objects.get(idTavolo = idTavolo)
+        except Ordine.DoesNotExist:
+            ordine = None
+
+        if ordine is not None:
+            componenti = ComponenteOrdine.objects.filter(idOrdine = ordine.id)
+        else:
+            componenti = []
+        try:
+            ordineTemporaneo = OrdineTemporaneo.objects.get(idTavolo = idTavolo)
+        except OrdineTemporaneo.DoesNotExist:
+            ordineTemporaneo = OrdineTemporaneo()
+        if ordineTemporaneo:
+            componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
+        else:
+            componentiTemporanei = []
+        return render(request, "ordini/tabellaOrdini.html", {'ordine':ordine, 'componenti':componenti,'componentitemporanei':componentiTemporanei, 'idOrdineTemporaneo':ordineTemporaneo.id})
+
+@login_required
 def aggiungiComponenteTemporaneo(request):
     if request.method == 'POST':
         idTavolo = request.POST['idTavolo']
@@ -194,7 +216,7 @@ def aggiungiComponenteTemporaneo(request):
             ordineTemporaneo = None
 
         if not ordineTemporaneo:
-            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, stato = Stato.objects.get(id = 1))
+            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, stato = Stato.objects.get(id = 1), orario=datetime.now().time())
             ordineTemporaneo.save()
 
         componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni)
@@ -212,8 +234,10 @@ def confermaAggiuntaComponenti(request):
         idOrdineTemporaneo = request.POST['idOrdineTemporaneo']
         ordineTemporaneo = OrdineTemporaneo.objects.get(id = idOrdineTemporaneo)
         componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
-
-        ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, stato = ordineTemporaneo.stato, uscitaAttuale = ordineTemporaneo.uscitaAttuale)
+        try:
+            ordine = Ordine.objects.get(idTavolo = ordineTemporaneo.idTavolo)
+        except Ordine.DoesNotExist:
+            ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, stato = ordineTemporaneo.stato, uscitaAttuale = ordineTemporaneo.uscitaAttuale, orario=ordineTemporaneo.orario)
         ordine.save()
         for componenteTemp in componentiTemporanei:
             componente = ComponenteOrdine(idOrdine = ordine, 
