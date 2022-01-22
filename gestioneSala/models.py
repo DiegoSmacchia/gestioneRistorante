@@ -33,9 +33,8 @@ class Stato(models.Model):
 
 class Ordine(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
-    stato = models.ForeignKey(Stato, on_delete=CASCADE)
     uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
-    orario = models.TimeField(null=True)
+    orario = models.TimeField()
     class Meta:
         verbose_name = 'Ordine'
         verbose_name_plural = 'Ordini'
@@ -46,6 +45,7 @@ class ComponenteOrdine(models.Model):
     quantita = models.DecimalField(max_digits = 5, decimal_places = 2, validators=[MinValueValidator(0)])
     uscita = models.IntegerField(validators=[MinValueValidator(0)])
     variazioni = models.CharField(max_length=100)
+    stato = models.ForeignKey(Stato, on_delete=CASCADE)
     class Meta:
         verbose_name = 'ComponenteOrdine'
         verbose_name_plural = 'ComponentiOrdini'
@@ -54,7 +54,7 @@ class OrdineTemporaneo(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
     stato = models.ForeignKey(Stato, on_delete=CASCADE)
     uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
-    orario = models.TimeField(null=True)
+    orario = models.TimeField()
     class Meta:
         verbose_name = 'OrdineTemporaneo'
         verbose_name_plural = 'OrdiniTemporanei'
@@ -65,6 +65,7 @@ class ComponenteTemporaneo(models.Model):
     quantita = models.DecimalField(max_digits = 5, decimal_places = 2, validators=[MinValueValidator(0)])
     uscita = models.IntegerField(validators=[MinValueValidator(0)])
     variazioni = models.CharField(max_length=100)
+    stato = models.ForeignKey(Stato, on_delete=CASCADE)
     class Meta:
         verbose_name = 'ComponenteTemporaneo'
         verbose_name_plural = 'ComponentiTemporanei'

@@ -30,10 +30,10 @@ def nuovoIngrediente(request):
             # process the data in form.cleaned_data as required
             nuovoIngrediente = Ingrediente(nome = form.cleaned_data['nome'], idMisura = form.cleaned_data['idMisura'], fattoInCasa = form.cleaned_data['fattoInCasa'])
             nuovoIngrediente.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
         else:
             print(form)
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
     else:      
         return Error
 
@@ -59,9 +59,9 @@ def applicaModificheIngrediente(request):
             ingrediente.fattoInCasa = form.cleaned_data['fattoInCasa']
             ingrediente.idMisura = form.cleaned_data['idMisura']
             ingrediente.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
     else:
         return Error
     
@@ -71,7 +71,7 @@ def eliminaIngrediente(request):
         idIngrediente = request.POST['idIngrediente']
         ingrediente = Ingrediente.objects.get(id=idIngrediente)
         ingrediente.delete()
-        return render(request, 'operazioneRiuscita.html', {'messaggio':"Ingrediente Eliminato!", 'idDiv':'divNotifica'})
+        return render(request, 'operazioneRiuscita.html', {'messaggio':"Ingrediente Eliminato!"})
     else:
         return Error
 
@@ -101,7 +101,7 @@ def nuovoPiatto(request):
                                 tempoPreparazione = form.cleaned_data['tempoPreparazione'],
                                 tempoCottura = form.cleaned_data['tempoCottura'])
             nuovoPiatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
     else:      
         return Error
 
@@ -127,7 +127,7 @@ def applicaModifichePiatto(request):
             piatto.tempoPreparazione = form.cleaned_data['tempoPreparazione']
             piatto.tempoCottura = form.cleaned_data['tempoCottura']
             piatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!", 'idDiv':'divNotifica'})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
 
     else:
         return Error
@@ -138,7 +138,7 @@ def eliminaPiatto(request):
         idPiatto = request.POST['idPiatto']
         piatto = Piatto.objects.get(id=idPiatto)
         piatto.delete()
-        return render(request, 'operazioneRiuscita.html', {'messaggio':"Piatto Eliminato!", 'idDiv':'divNotifica'})
+        return render(request, 'operazioneRiuscita.html', {'messaggio':"Piatto Eliminato!"})
     else:
         return Error
 
@@ -187,7 +187,7 @@ def applicaModificheIngredientePiatto(request):
             ingredientePiatto.idIngrediente = form.cleaned_data['idIngrediente']
             ingredientePiatto.quantita = form.cleaned_data['quantita']
             ingredientePiatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!", 'idDiv':'divNotificaIngredientePiatto'})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
 
     else:
         return Error
@@ -198,7 +198,7 @@ def eliminaIngredientePiatto(request):
         idIngredientePiatto = request.POST['idIngredientePiatto']
         ingredientePiatto = IngredientePiatto.objects.get(id=idIngredientePiatto)
         ingredientePiatto.delete()
-        return render(request, 'operazioneRiuscita.html', {'messaggio':"Ingrediente del Piatto Eliminato!", 'idDiv':'divNotificaIngredientePiatto'})
+        return render(request, 'operazioneRiuscita.html', {'messaggio':"Ingrediente del Piatto Eliminato!"})
     else:
         return Error
 

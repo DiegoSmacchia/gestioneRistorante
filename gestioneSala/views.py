@@ -216,10 +216,10 @@ def aggiungiComponenteTemporaneo(request):
             ordineTemporaneo = None
 
         if not ordineTemporaneo:
-            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, stato = Stato.objects.get(id = 1), orario=datetime.now().time())
+            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, orario=datetime.now().time())
             ordineTemporaneo.save()
 
-        componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni)
+        componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = Stato.objects.get(id = 1),)
         componente.save()
         componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
         print(componentiTemporanei)
@@ -237,14 +237,15 @@ def confermaAggiuntaComponenti(request):
         try:
             ordine = Ordine.objects.get(idTavolo = ordineTemporaneo.idTavolo)
         except Ordine.DoesNotExist:
-            ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, stato = ordineTemporaneo.stato, uscitaAttuale = ordineTemporaneo.uscitaAttuale, orario=ordineTemporaneo.orario)
+            ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, uscitaAttuale = ordineTemporaneo.uscitaAttuale, orario=ordineTemporaneo.orario)
         ordine.save()
         for componenteTemp in componentiTemporanei:
             componente = ComponenteOrdine(idOrdine = ordine, 
                                         idPiatto = componenteTemp.idPiatto, 
                                         quantita = componenteTemp.quantita, 
                                         uscita = componenteTemp.uscita, 
-                                        variazioni = componenteTemp.variazioni)
+                                        variazioni = componenteTemp.variazioni,
+                                        stato = componenteTemp.stato)
             componente.save()
             componenteTemp.delete()
         ordineTemporaneo.delete()

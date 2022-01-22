@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'gestioneUtenti.apps.GestioneutentiConfig',
     'gestioneMenu.apps.GestionemenuConfig',
-    'gestioneSala.apps.GestionesalaConfig'
+    'gestioneSala.apps.GestionesalaConfig',
+    'gestioneMagazzino.apps.GestionemagazzinoConfig'
 ]
 
 LOGIN_URL = 'login'

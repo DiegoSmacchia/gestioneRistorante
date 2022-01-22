@@ -27,6 +27,15 @@
             </a>
         </div>
 
+        <div class="col-sm-12 col-md-6 col-lg-3 categoria">
+            <a href="{% url 'gestioneMagazzino' %}">
+                <div class="contenutoCategoria">
+                    <i class="fas fa-warehouse fa-6x"></i>
+                    <p>Gestione Magazzino</p>
+                </div>
+            </a>
+        </div>
+
         {% if permessoAggiuntaUtente %}
             <div class="col-sm-12 col-md-6 col-lg-3 categoria">
                 <a href="{% url 'registrazione' %}">
@@ -37,7 +46,7 @@
                 </a>
             </div>
         {% endif %}
-        <div class="col-sm-12 col-md-6 col-lg-3 categoria"><div class="contenutoCategoria">aaa</div></div>
+        
     </div>
 </div>
 
