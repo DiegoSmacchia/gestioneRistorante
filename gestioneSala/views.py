@@ -36,15 +36,8 @@ def tabellaTavoli(request):
 @login_required()
 def nuovaSala(request):
     if request.method == 'POST':
-        form = SalaForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            nuovaSala = Sala(nome = form.cleaned_data['nome'])
-            nuovaSala.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito!"})
+        form = SalaForm()
+        return render(request,  'sale/formSala.html', {'idSala':0, 'form':form, 'oggetto':'Inserimento'})
     else:      
         return Error
 
@@ -55,22 +48,25 @@ def modificaSala(request):
         sala = Sala.objects.get(id=idSala)
         form = SalaForm(initial={'nome':sala.nome})
 
-        return render(request, 'sale/modificaSala.html', {'idSala':idSala, 'form':form})
+        return render(request, 'sale/formSala.html', {'idSala':idSala, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required()
-def applicaModificheSala(request):
+def applicaInserimentoModificaSala(request):
     if request.method == 'POST':
         form = SalaForm(request.POST)
         idSala = request.POST['idSala']
         if form.is_valid():
-            sala = Sala.objects.get(id=idSala)
+            if idSala == '0':
+                sala = Sala()
+            else:
+                sala = Sala.objects.get(id=idSala)
             sala.nome = form.cleaned_data['nome']
             sala.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica Fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione Fallita, ricontrollare i campi!"})
     else:
         return Error
     
@@ -92,15 +88,8 @@ def eliminaSala(request):
 @login_required()
 def nuovoTavolo(request):
     if request.method == 'POST':
-        form = TavoloForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            nuovoTavolo = Tavolo(idSala = form.cleaned_data['idSala'], nome = form.cleaned_data['nome'])
-            nuovoTavolo.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito!"})
+        form = TavoloForm()
+        return render(request, 'sale/formTavolo.html', {'idTavolo':0, 'form':form, 'oggetto':'Inserimento'})
     else:      
         return Error
 
@@ -111,23 +100,26 @@ def modificaTavolo(request):
         tavolo = Tavolo.objects.get(id=idTavolo)
         form = TavoloForm(initial={'idSala':tavolo.idSala,'nome':tavolo.nome})
 
-        return render(request, 'sale/modificaTavolo.html', {'idTavolo':idTavolo, 'form':form})
+        return render(request, 'sale/formTavolo.html', {'idTavolo':idTavolo, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required()
-def applicaModificheTavolo(request):
+def applicaInserimentoModificaTavolo(request):
     if request.method == 'POST':
         form = TavoloForm(request.POST)
         idTavolo = request.POST['idTavolo']
         if form.is_valid():
-            tavolo = Tavolo.objects.get(id=idTavolo)
+            if idTavolo == '0':
+                tavolo = Tavolo()
+            else:
+                tavolo = Tavolo.objects.get(id=idTavolo)
             tavolo.idSala = form.cleaned_data['idSala']
             tavolo.nome = form.cleaned_data['nome']
             tavolo.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica Fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione Fallita, ricontrollare i campi!"})
     else:
         return Error
     

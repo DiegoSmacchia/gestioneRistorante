@@ -1,10 +1,10 @@
-<form hx-post="{% url 'applicaModificheCategoria' %}" class="formInserimento">
+<form hx-post="{% url 'applicaInserimentoModificaMisura' %}" class="formInserimento">
       
     <div>
       <div class="row">
-        <button type="submit" class="btn btn-success buttonAzione">Conferma Modifica</button>
+        <button type="submit" class="btn btn-success buttonAzione">Conferma {{oggetto}}</button>
       </div>
-
+  
       <br>
       {% csrf_token %}
       <div class="row">
@@ -16,7 +16,7 @@
         </div>
       </div>  
       <br>
-      <input type="hidden" value="{{ idCategoria }}" name="idCategoria">
+      <input type="hidden" value="{{ idMisura }}" name="idMisura">
   
       
     </div>

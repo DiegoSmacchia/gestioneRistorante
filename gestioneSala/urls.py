@@ -6,14 +6,17 @@ urlpatterns = [
     path('sale', views.saleTavoli, name = 'saleTavoli'),
     path('tabellaSale', views.tabellaSale, name='tabellaSale'),
     path('tabellaTavoli', views.tabellaTavoli, name='tabellaTavoli'),
+
     path('nuovaSala', views.nuovaSala, name='nuovaSala'),
     path('modificaSala', views.modificaSala, name='modificaSala'),
-    path('applicaModificheSala', views.applicaModificheSala, name='applicaModificheSala'),
+    path('applicaInserimentoModificaSala', views.applicaInserimentoModificaSala, name='applicaInserimentoModificaSala'),
     path('eliminaSala', views.eliminaSala, name='eliminaSala'),
+
     path('nuovoTavolo', views.nuovoTavolo, name='nuovoTavolo'),
     path('modificaTavolo', views.modificaTavolo, name='modificaTavolo'),
-    path('applicaModificheTavolo', views.applicaModificheTavolo, name='applicaModificheTavolo'),
+    path('applicaInserimentoModificaTavolo', views.applicaInserimentoModificaTavolo, name='applicaInserimentoModificaTavolo'),
     path('eliminaTavolo/', views.eliminaTavolo, name='eliminaTavolo'),
+
     path('ordini', views.ordini, name = 'ordini'),
     path('gestioneOrdine/<int:idTavolo>', views.gestioneOrdine, name = 'gestioneOrdine'),
     path('tabellaOrdini/<int:idTavolo>', views.tabellaOrdini, name='tabellaOrdini'),

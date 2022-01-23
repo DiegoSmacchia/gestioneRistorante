@@ -16,53 +16,11 @@
   {% if permessiAzioni %}
   <div class="col-sm-12 col-md-6 col-lg-4">
     <form hx-post="{% url 'nuovaScorta' %}" hx-target="#divNotifica" class="formInserimento">
-      <div x-data="{ inserimento: false }">
-        <div class="row">
-          <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuova Scorta</button>
-        </div>
-        
-        <div x-show="inserimento">
-          <div class="row">
-            <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
-            <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
-          </div>
-      
-          <br>
-          {% csrf_token %}
-          <div class="row">
-            <div class="col-sm-12 col-md-3">
-              {{form.idIngrediente.label}}
-            </div>
-            <div class="col-sm-12 col-md-9">
-              {{form.idIngrediente}}
-            </div>
-          </div>  
-          <br>
-          <div class="row">
-            <div class="col-sm-12 col-md-3">
-              {{form.quantitaAttuale.label}}
-            </div>
-            <div class="col-sm-12 col-md-9">
-              {{form.quantitaAttuale}}
-            </div>
-          </div>
-          <br>
-          <div class="row">
-            <div class="col-sm-12 col-md-3">
-              {{form.quantitaMinima.label}}
-            </div>
-            <div class="col-sm-12 col-md-9">
-              {{form.quantitaMinima}}
-            </div>
-          </div>
-          <br>
-          <br>
-      
-          
-        </div>
-      
+      {% csrf_token %}
+      <div class="row">
+        <button type="submit" class="btn btn-primary buttonAzione" >Nuova Scorta</button>
       </div>
-      </form>
+  </form>
   </div>
   {% endif %}
 </div>

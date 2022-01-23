@@ -28,34 +28,14 @@
 
         <div class="row">
           {% if permessiAzioni %}
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovaSala' %}" class="formInserimento" hx-target="#divNotifica">
-                <div x-data="{ inserimento: false }">
-                  <div class="row">
-                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuova Sala</button>
-                  </div>
-                  
-                  <div x-show="inserimento">
-                    <div class="row">
-                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
-                    </div>
-                
-                    <br>
-                    {% csrf_token %}
-                    <div class="row">
-                      <div class="col-sm-12 col-md-3">
-                        {{salaform.nome.label}}
-                      </div>
-                      <div class="col-sm-12 col-md-9">
-                        {{salaform.nome}}
-                      </div>
-                    </div>  
-                    <br>
-                  </div>               
-                </div>
-                </form>
-            </div>
+          <div class="col-sm-12 col-md-6 col-lg-4">
+            <form hx-post="{% url 'nuovaSala' %}" hx-target="#divNotifica" class="formInserimento">
+              {% csrf_token %}
+              <div class="row">
+                <button type="submit" class="btn btn-primary buttonAzione" >Nuova Sala</button>
+              </div>
+          </form>
+        </div>
             {% endif %}
           </div>
           
@@ -74,44 +54,14 @@
       </div>
       <div class="row">
       {% if permessiAzioni %}
-            <div class="col-sm-12 col-md-6 col-lg-4">
-              <form hx-post="{% url 'nuovoTavolo' %}" class="formInserimento" hx-target="#divNotificaTavolo">
-                <div x-data="{ inserimento: false }">
-                  <div class="row">
-                    <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuovo Tavolo</button>
-                  </div>
-                  
-                  <div x-show="inserimento">
-                    <div class="row">
-                      <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
-                      <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
-                    </div>
-                
-                    <br>
-                    {% csrf_token %}
-                    <div class="row">
-                      <div class="col-sm-12 col-md-3">
-                        {{tavoloform.idSala.label}}
-                      </div>
-                      <div class="col-sm-12 col-md-9">
-                        {{tavoloform.idSala}}
-                      </div>
-                    </div>  
-                    <br>
-                    <div class="row">
-                      <div class="col-sm-12 col-md-3">
-                        {{ tavoloform.nome.label }}
-                      </div>
-                      <div class="col-sm-12 col-md-9">
-                        {{ tavoloform.nome }}
-                      </div>
-                    </div>
-                    <br>
-                  </div>
-                
-                </div>
-                </form>
-            </div>
+      <div class="col-sm-12 col-md-6 col-lg-4">
+        <form hx-post="{% url 'nuovoTavolo' %}" hx-target="#divNotificaTavolo" class="formInserimento">
+          {% csrf_token %}
+          <div class="row">
+            <button type="submit" class="btn btn-primary buttonAzione" >Nuovo Tavolo</button>
+          </div>
+      </form>
+    </div>
       {% endif %}
       </div>
 

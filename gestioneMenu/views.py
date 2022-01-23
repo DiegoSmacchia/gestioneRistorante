@@ -8,7 +8,7 @@ from .forms import IngredienteForm, IngredientePiattoForm, MenuForm, MisuraForm,
 # Create your views here.
 @login_required
 def gestioneMenu(request):
-    return render(request, 'gestioneMenu.html', {'permessiAzioni':request.user.has_perm('gestioneMenu.delete_Ingrediente')})
+    return render(request, 'gestioneMenu.html')
 
 ##Ingredienti
 @login_required()
@@ -24,17 +24,9 @@ def tabellaIngredienti(request):
 @login_required()
 def nuovoIngrediente(request):
     if request.method == 'POST':
-        form = IngredienteForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            nuovoIngrediente = Ingrediente(nome = form.cleaned_data['nome'], idMisura = form.cleaned_data['idMisura'], fattoInCasa = form.cleaned_data['fattoInCasa'])
-            nuovoIngrediente.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            print(form)
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
-    else:      
+        form = IngredienteForm()
+        return render(request, 'ingredienti/formIngrediente.html', {'idIngrediente':0, 'form':form, 'oggetto':'Inserimento'})
+    else:
         return Error
 
 @login_required()
@@ -44,24 +36,28 @@ def modificaIngrediente(request):
         ingrediente = Ingrediente.objects.get(id=idIngrediente)
         form = IngredienteForm(initial={'nome':ingrediente.nome, 'idMisura':ingrediente.idMisura, 'fattoInCasa':ingrediente.fattoInCasa})
 
-        return render(request, 'ingredienti/modificaIngrediente.html', {'idIngrediente':idIngrediente, 'form':form})
+        return render(request, 'ingredienti/formIngrediente.html', {'idIngrediente':idIngrediente, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required()
-def applicaModificheIngrediente(request):
+def applicaInserimentoModificaIngrediente(request):
     if request.method == 'POST':
         form = IngredienteForm(request.POST)
         idIngrediente = request.POST['idIngrediente']
         if form.is_valid():
-            ingrediente = Ingrediente.objects.get(id=idIngrediente)
+            if idIngrediente == '0':
+                ingrediente = Ingrediente()
+            else:
+                ingrediente = Ingrediente.objects.get(id=idIngrediente)
+
             ingrediente.nome = form.cleaned_data['nome']
             ingrediente.fattoInCasa = form.cleaned_data['fattoInCasa']
             ingrediente.idMisura = form.cleaned_data['idMisura']
             ingrediente.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione fallita, ricontrollare i campi!"})
     else:
         return Error
     
@@ -92,17 +88,9 @@ def tabellaPiatti(request):
 @login_required()
 def nuovoPiatto(request):
     if request.method == 'POST':
-        form = PiattoForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            nuovoPiatto = Piatto(nome = form.cleaned_data['nome'], 
-                                idCategoria = form.cleaned_data['idCategoria'],
-                                tempoPreparazione = form.cleaned_data['tempoPreparazione'],
-                                tempoCottura = form.cleaned_data['tempoCottura'])
-            nuovoPiatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-    else:      
+        form = PiattoForm()
+        return render(request, 'piatti/formPiatto.html', {'idPiatto':0, 'form':form, 'oggetto':'Inserimento'})
+    else:
         return Error
 
 @login_required()
@@ -112,23 +100,28 @@ def modificaPiatto(request):
         piatto = Piatto.objects.get(id=idPiatto)
         form = PiattoForm(initial={'nome':piatto.nome, 'tempoPreparazione':piatto.tempoPreparazione, 'tempoCottura':piatto.tempoCottura, 'idCategoria':piatto.idCategoria})
 
-        return render(request, 'piatti/modificaPiatto.html', {'idPiatto':idPiatto, 'form':form})
+        return render(request, 'piatti/formPiatto.html', {'idPiatto':idPiatto, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required()
-def applicaModifichePiatto(request):
+def applicaInserimentoModificaPiatto(request):
     if request.method == 'POST':
         form = PiattoForm(request.POST)
         idPiatto = request.POST['idPiatto']
         if form.is_valid():
-            piatto = Piatto.objects.get(id=idPiatto)
+            if idPiatto == '0':
+                piatto = Piatto()
+            else:
+                piatto = Piatto.objects.get(id=idPiatto)
+            piatto.idCategoria = form.cleaned_data['idCategoria']
             piatto.nome = form.cleaned_data['nome']
             piatto.tempoPreparazione = form.cleaned_data['tempoPreparazione']
             piatto.tempoCottura = form.cleaned_data['tempoCottura']
             piatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
-
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
+        else:
+            return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, ricontrollare i campi!'})
     else:
         return Error
     
@@ -152,17 +145,9 @@ def tabellaIngredientiPiatti(request):
 @login_required()
 def nuovoIngredientePiatto(request):
     if request.method == 'POST':
-        form = IngredientePiattoForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            # process the data in form.cleaned_data as required
-            nuovoIngredientePiatto = IngredientePiatto()
-            nuovoIngredientePiatto.idPiatto = form.cleaned_data['idPiatto']
-            nuovoIngredientePiatto.idIngrediente = form.cleaned_data['idIngrediente']
-            nuovoIngredientePiatto.quantita = form.cleaned_data['quantita']
-            nuovoIngredientePiatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-    else:      
+        form = IngredientePiattoForm()
+        return render(request, 'piatti/formIngredientePiatto.html', {'idIngredientePiatto':0, 'form':form, 'oggetto':'Inserimento'})
+    else:
         return Error
 
 @login_required()
@@ -172,23 +157,27 @@ def modificaIngredientePiatto(request):
         ingredientePiatto = IngredientePiatto.objects.get(id=idIngredientePiatto)
         form = IngredientePiattoForm(initial={'idPiatto':ingredientePiatto.idPiatto, 'idIngrediente':ingredientePiatto.idIngrediente, 'quantita':ingredientePiatto.quantita})
 
-        return render(request, 'piatti/modificaIngredientePiatto.html', {'idIngredientePiatto':idIngredientePiatto, 'form':form})
+        return render(request, 'piatti/formIngredientePiatto.html', {'idIngredientePiatto':idIngredientePiatto, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required()
-def applicaModificheIngredientePiatto(request):
+def applicaInserimentoModificaIngredientePiatto(request):
     if request.method == 'POST':
         form = IngredientePiattoForm(request.POST)
         idIngredientePiatto = request.POST['idIngredientePiatto']
         if form.is_valid():
-            ingredientePiatto = IngredientePiatto.objects.get(id=idIngredientePiatto)
+            if idIngredientePiatto == '0':
+                ingredientePiatto = IngredientePiatto()
+            else:
+                ingredientePiatto = IngredientePiatto.objects.get(id=idIngredientePiatto)
             ingredientePiatto.idPiatto = form.cleaned_data['idPiatto']
             ingredientePiatto.idIngrediente = form.cleaned_data['idIngrediente']
             ingredientePiatto.quantita = form.cleaned_data['quantita']
             ingredientePiatto.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
-
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
+        else:
+            return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, ricontrollare i campi!'})
     else:
         return Error
     
@@ -281,17 +270,12 @@ def tabellaMisure(request):
     misure = Misura.objects.all()
     return render(request, 'misure/tabellaMisure.html', {'misure' : misure,'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Misura')})
 
-@login_required()
+@login_required
 def nuovaMisura(request):
     if request.method == 'POST':
-        form = MisuraForm(request.POST)
-        if form.is_valid():
-            nuovaMisura = Misura(nome = form.cleaned_data['nome'])
-            nuovaMisura.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
-    else:      
+        form = MisuraForm()
+        return render(request, 'misure/formMisura.html', {'idMisura':0, 'form':form, 'oggetto':'Inserimento'})
+    else:
         return Error
 
 @login_required
@@ -301,23 +285,27 @@ def modificaMisura(request):
         misura = Misura.objects.get(id=idMisura)
         form = MisuraForm(initial={'nome':misura.nome})
 
-        return render(request, 'misure/modificaMisura.html', {'idMisura':idMisura, 'form':form})
+        return render(request, 'misure/formMisura.html', {'idMisura':idMisura, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required
-def applicaModificheMisura(request):
+def applicaInserimentoModificaMisura(request):
     if request.method == 'POST':
         form = MisuraForm(request.POST)
         idMisura = request.POST['idMisura']
         if form.is_valid():
-            misura = Misura.objects.get(id=idMisura)
+            print(idMisura)
+            if idMisura == '0':
+                misura = Misura()
+            else:
+                misura = Misura.objects.get(id=idMisura)
             misura.nome = form.cleaned_data['nome']
             misura.save()
 
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione fallita, ricontrollare i campi!"})
     else:
         return Error
     
@@ -346,17 +334,12 @@ def tabellaCategorie(request):
     categorie = Categoria.objects.all()
     return render(request, 'categorie/tabellaCategorie.html', {'categorie' : categorie,'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Categoria')})
 
-@login_required()
+@login_required
 def nuovaCategoria(request):
     if request.method == 'POST':
-        form = CategoriaForm(request.POST)
-        if form.is_valid():
-            nuovaCategoria = Categoria(nome = form.cleaned_data['nome'])
-            nuovaCategoria.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
-    else:      
+        form = CategoriaForm()
+        return render(request, 'categorie/formCategoria.html', {'idCategoria':0, 'form':form, 'oggetto':'Inserimento'})
+    else:
         return Error
 
 @login_required
@@ -366,23 +349,26 @@ def modificaCategoria(request):
         categoria = Categoria.objects.get(id=idCategoria)
         form = CategoriaForm(initial={'nome':categoria.nome})
 
-        return render(request, 'categorie/modificaCategoria.html', {'idCategoria':idCategoria, 'form':form})
+        return render(request, 'categorie/formCategoria.html', {'idCategoria':idCategoria, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required
-def applicaModificheCategoria(request):
+def applicaInserimentoModificaCategoria(request):
     if request.method == 'POST':
-        form = MisuraForm(request.POST)
+        form = CategoriaForm(request.POST)
         idCategoria = request.POST['idCategoria']
         if form.is_valid():
-            categoria = Categoria.objects.get(id=idCategoria)
+            if idCategoria == '0':
+                categoria = Categoria()
+            else:
+                categoria = Categoria.objects.get(id=idCategoria)
             categoria.nome = form.cleaned_data['nome']
             categoria.save()
 
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione fallita, ricontrollare i campi!"})
     else:
         return Error
     

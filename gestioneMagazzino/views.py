@@ -24,23 +24,8 @@ def tabellaScorte(request):
 @login_required
 def nuovaScorta(request):
     if request.method == 'POST':
-        form = ScortaForm(request.POST)
-        
-        if form.is_valid():
-            try:
-                scortaEsistente = Scorta.objects.get(idIngrediente = form.cleaned_data['idIngrediente'])
-                if scortaEsistente is not None:
-                    return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ingrediente già presente!"})
-            except Scorta.DoesNotExist:
-                nuovaScorta = Scorta(idIngrediente = form.cleaned_data['idIngrediente'], 
-                                quantitaAttuale = form.cleaned_data['quantitaAttuale'], 
-                                quantitaMinima = form.cleaned_data['quantitaMinima'])
-                nuovaScorta.save()
-                aggiornaListe(nuovaScorta)
-                return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
-        else:
-            print(form)
-            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
+        form = ScortaForm()
+        return render(request, "scorte/formScorta.html", {'idScorta':0, 'form':form, 'oggetto':'Inserimento'})
     else:      
         return Error
 
@@ -51,26 +36,40 @@ def modificaScorta(request):
         scorta = Scorta.objects.get(id=idScorta)
         form = ScortaForm(initial={'idIngrediente':scorta.idIngrediente, 'quantitaAttuale':scorta.quantitaAttuale, 'quantitaMinima':scorta.quantitaMinima})
 
-        return render(request, 'scorte/modificaScorta.html', {'idScorta':idScorta, 'form':form})
+        return render(request, 'scorte/formScorta.html', {'idScorta':idScorta, 'form':form, 'oggetto':'Modifica'})
     else:
         return Error
 
 @login_required
-def applicaModificheScorta(request):
+def applicaInserimentoModificaScorta(request):
     if request.method == 'POST':
         form = ScortaForm(request.POST)
         idScorta = request.POST['idScorta']
         print(form)
         if form.is_valid():
-            scorta = Scorta.objects.get(id=idScorta)
+            if idScorta == '0':
+                try:
+                    scortaEsistente = Scorta.objects.get(idIngrediente = form.cleaned_data['idIngrediente'])
+                    if scortaEsistente is not None:
+                        return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ingrediente già presente!"})
+                except Scorta.DoesNotExist:
+                    scorta = Scorta()
+            else:
+                scorta = Scorta.objects.get(id=idScorta)
+                if scorta.idIngrediente != form.cleaned_data['idIngrediente']:
+                    scortaEsistente = Scorta.objects.filter(idIngrediente = form.cleaned_data['idIngrediente'])
+                    if scortaEsistente.count() > 0:
+                        return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ingrediente già presente!"})
+      
             scorta.idIngrediente = form.cleaned_data['idIngrediente']
             scorta.quantitaAttuale = form.cleaned_data['quantitaAttuale']
             scorta.quantitaMinima = form.cleaned_data['quantitaMinima']
+
             scorta.save()
             aggiornaListe(scorta)
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:
-            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+            return render(request, 'operazioneFallita.html', {'messaggio':"Operazione fallita, ricontrollare i campi!"})
     else:
         return Error
     
