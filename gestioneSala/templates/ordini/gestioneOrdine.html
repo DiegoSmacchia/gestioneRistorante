@@ -14,6 +14,13 @@
 
 <div hx-get="{% url 'tabellaOrdini' tavolo %}" hx-trigger="every 1s">
   {% if componenti %}
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <a href="{% url 'conto' tavolo %}" class="formInserimento">
+      <div class="row">
+        <button type="button" class="btn btn-primary buttonAzione" >Visualizza Conto</button>
+      </div>
+    </a>
+  </div>
   <table class="table table-primary">
       <thead>
         <tr>
@@ -41,6 +48,7 @@
                 {{componente.variazioni}}
               </td>
               <td>
+                {% if componente.stato.id == 1 %}
                 <div class="row">
                     
                   <div class="col-sm-6 col-md-3">
@@ -57,7 +65,8 @@
                       <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                     </form>
                   </div>
-                </div>              
+                </div>      
+                {% endif %}        
                 
               </td>
           </tr>

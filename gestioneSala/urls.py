@@ -27,4 +27,6 @@ urlpatterns = [
     path('applicaModificheComponenteOrdine', views.applicaModificheComponenteOrdine, name='applicaModificheComponenteOrdine'),
     path('eliminaComponenteOrdine', views.eliminaComponenteOrdine, name='eliminaComponenteOrdine'),
 
+    path('conto/<int:idTavolo>', views.conto, name = 'conto'),
+
 ]

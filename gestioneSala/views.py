@@ -1,6 +1,8 @@
 from aifc import Error
 from datetime import datetime
+from decimal import Decimal
 from multiprocessing import Lock
+from unicodedata import decimal
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from .forms import ComponenteOrdineForm
@@ -190,7 +192,7 @@ def tabellaOrdini(request, idTavolo):
             componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
         else:
             componentiTemporanei = []
-        return render(request, "ordini/tabellaOrdini.html", {'ordine':ordine, 'componenti':componenti,'componentitemporanei':componentiTemporanei, 'idOrdineTemporaneo':ordineTemporaneo.id})
+        return render(request, "ordini/tabellaOrdini.html", {'ordine':ordine, 'componenti':componenti,'componentitemporanei':componentiTemporanei, 'idOrdineTemporaneo':ordineTemporaneo.id, 'idTavolo':idTavolo})
 
 @login_required
 def aggiungiComponenteTemporaneo(request):
@@ -210,11 +212,10 @@ def aggiungiComponenteTemporaneo(request):
         if not ordineTemporaneo:
             ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, orario=datetime.now().time())
             ordineTemporaneo.save()
-
-        componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = Stato.objects.get(id = 1),)
+        statoIniziale = Stato.objects.get(id = 1)
+        componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = statoIniziale)
         componente.save()
         componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
-        print(componentiTemporanei)
         return render(request, 'ordini/ordiniTemporanei.html', {'componentitemporanei':componentiTemporanei, 'idOrdineTemporaneo':ordineTemporaneo.id})
 
     else:
@@ -297,4 +298,20 @@ def eliminaComponenteOrdine(request):
         componente.delete()
         return render(request, 'operazioneRiuscita.html', {'messaggio':"Componente Eliminato!"})
     else:
+        return Error
+
+@login_required
+def conto(request, idTavolo):
+    try:
+        tavolo = Tavolo.objects.get(id = idTavolo)
+        ordine = Ordine.objects.get(idTavolo = idTavolo)
+        componentiOrdine = ComponenteOrdine.objects.filter(idOrdine = ordine)
+        piattiMenu = Menu.objects.all()
+        prezzoTotale = 0
+        for componente in componentiOrdine:
+            piatto = piattiMenu.get(idPiatto = componente.idPiatto)
+            prezzo = Decimal(piatto.prezzo) * componente.quantita
+            prezzoTotale += prezzo
+        return render(request, "ordini/conto.html", {'componenti':componentiOrdine, 'totale':prezzoTotale, 'tavolo':tavolo})
+    except Ordine.DoesNotExist:
         return Error

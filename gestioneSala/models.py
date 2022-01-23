@@ -44,7 +44,7 @@ class ComponenteOrdine(models.Model):
     idPiatto = models.ForeignKey(Piatto, on_delete=CASCADE)
     quantita = models.DecimalField(max_digits = 5, decimal_places = 2, validators=[MinValueValidator(0)])
     uscita = models.IntegerField(validators=[MinValueValidator(0)])
-    variazioni = models.CharField(max_length=100)
+    variazioni = models.CharField(max_length=100, blank=True)
     stato = models.ForeignKey(Stato, on_delete=CASCADE)
     class Meta:
         verbose_name = 'ComponenteOrdine'
@@ -52,7 +52,6 @@ class ComponenteOrdine(models.Model):
 
 class OrdineTemporaneo(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
-    stato = models.ForeignKey(Stato, on_delete=CASCADE)
     uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
     orario = models.TimeField()
     class Meta:

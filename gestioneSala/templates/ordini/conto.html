@@ -1,0 +1,22 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/conto.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="conto">
+    <h2>Conto del tavolo {{tavolo.nome}}</h2>
+    <hr>
+    {% for componente in componenti %}
+    <p>{{componente.quantita}} x {{componente.idPiatto}}</p>
+    {% endfor %}
+    <hr>
+    <h3>Totale: {{totale}}€</h3>
+</div>
+
+
+{% endblock %}
