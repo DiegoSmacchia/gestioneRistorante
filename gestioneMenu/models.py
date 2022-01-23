@@ -4,7 +4,7 @@ from django.db.models.deletion import CASCADE
 from django.db.models.fields.related import ForeignKey
 
 class Misura(models.Model):
-    nome = models.TextField(max_length=50)
+    nome = models.CharField(max_length=50)
     def __str__(self):
         return self.nome
     class Meta:

@@ -1,0 +1,42 @@
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">Misura</th>
+        {% if permessiAzioni %}
+        <th scope="col">Azioni</th>
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+        {% for misura in misure %}
+        <tr>
+            <td>
+              {{ misura.nome }}
+            </td>
+            {% if permessiAzioni %}
+            <td>
+              <div class="row">
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'modificaMisura' %}" hx-target="#divNotifica">
+                    <input type="hidden" value="{{misura.id}}" name="idMisura">
+                    {% csrf_token %}
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-edit"></i></button>
+                  </form>
+                </div>
+                <div class="col-sm-6 col-md-3">
+                  <form hx-post="{% url 'eliminaMisura' %}" hx-target="#divNotifica">
+                    <input type="hidden" value="{{misura.id}}" name="idMisura">
+                    {% csrf_token %}
+                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa misura?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
+                </div>
+
+              </div>
+            </td>
+            {% endif %} 
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>

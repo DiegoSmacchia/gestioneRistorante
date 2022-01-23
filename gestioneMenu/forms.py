@@ -1,6 +1,6 @@
 from django.forms.models import ModelForm
 
-from gestioneMenu.models import IngredientePiatto, Ingrediente, Menu, Piatto
+from gestioneMenu.models import IngredientePiatto, Ingrediente, Menu, Piatto, Misura, Categoria
 
 class IngredienteForm(ModelForm):
     class Meta:
@@ -42,3 +42,16 @@ class MenuForm(ModelForm):
             'descrizione':'Descrizione: ',
             'prezzo':'prezzo: '
         }
+
+class MisuraForm(ModelForm):
+    class Meta:
+        model = Misura
+        fields = ['nome']
+        labels = { 'nome' : 'Nome: '}
+
+class CategoriaForm(ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nome']
+        labels = { 'nome' : 'Nome: '}
+        

@@ -1,0 +1,23 @@
+<form hx-post="{% url 'applicaModificheMisura' %}" class="formInserimento">
+      
+    <div>
+      <div class="row">
+        <button type="submit" class="btn btn-success buttonAzione">Conferma Modifica</button>
+      </div>
+  
+      <br>
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-sm-12 col-md-3">
+          {{form.nome.label}}
+        </div>
+        <div class="col-sm-12 col-md-9">
+          {{form.nome}}
+        </div>
+      </div>  
+      <br>
+      <input type="hidden" value="{{ idMisura }}" name="idMisura">
+  
+      
+    </div>
+</form>

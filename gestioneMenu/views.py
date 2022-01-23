@@ -1,14 +1,14 @@
 from django.core.checks.messages import Error
 from django.shortcuts import render
-from .models import Ingrediente, IngredientePiatto, Menu, Piatto
+from .models import Ingrediente, IngredientePiatto, Menu, Misura, Piatto, Categoria
 from django.contrib.auth.decorators import login_required
-from .forms import IngredienteForm, IngredientePiattoForm, MenuForm, PiattoForm
+from .forms import IngredienteForm, IngredientePiattoForm, MenuForm, MisuraForm, PiattoForm, CategoriaForm
 
 
 # Create your views here.
 @login_required
 def gestioneMenu(request):
-    return render(request, 'gestioneMenu.html')
+    return render(request, 'gestioneMenu.html', {'permessiAzioni':request.user.has_perm('gestioneMenu.delete_Ingrediente')})
 
 ##Ingredienti
 @login_required()
@@ -86,7 +86,7 @@ def piatti(request):
 @login_required
 def tabellaPiatti(request):
     piatti = Piatto.objects.all()
-    return render(request, 'piatti/tabellaPiatti.html', {'piatti' : piatti, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Ingrediente')})
+    return render(request, 'piatti/tabellaPiatti.html', {'piatti' : piatti, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Piatto')})
 
 
 @login_required()
@@ -267,5 +267,135 @@ def eliminaPiattoMenu(request):
         menu = Menu.objects.get(id=idMenu)
         menu.delete()
         return render(request, 'operazioneRiuscita.html', {'messaggio':"Piatto Eliminato dal Menu!"})
+    else:
+        return Error
+
+##Misure
+@login_required()
+def misure(request):
+    form = MisuraForm()
+    return render(request, 'misure/misure.html', {'form':form, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Misura') })
+
+@login_required
+def tabellaMisure(request):
+    misure = Misura.objects.all()
+    return render(request, 'misure/tabellaMisure.html', {'misure' : misure,'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Misura')})
+
+@login_required()
+def nuovaMisura(request):
+    if request.method == 'POST':
+        form = MisuraForm(request.POST)
+        if form.is_valid():
+            nuovaMisura = Misura(nome = form.cleaned_data['nome'])
+            nuovaMisura.save()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
+    else:      
+        return Error
+
+@login_required
+def modificaMisura(request):
+    if request.method == 'POST':
+        idMisura = request.POST['idMisura']
+        misura = Misura.objects.get(id=idMisura)
+        form = MisuraForm(initial={'nome':misura.nome})
+
+        return render(request, 'misure/modificaMisura.html', {'idMisura':idMisura, 'form':form})
+    else:
+        return Error
+
+@login_required
+def applicaModificheMisura(request):
+    if request.method == 'POST':
+        form = MisuraForm(request.POST)
+        idMisura = request.POST['idMisura']
+        if form.is_valid():
+            misura = Misura.objects.get(id=idMisura)
+            misura.nome = form.cleaned_data['nome']
+            misura.save()
+
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+    else:
+        return Error
+    
+@login_required()
+def eliminaMisura(request):
+    if request.method == 'POST':
+        idMisura = request.POST['idMisura']
+        misura = Misura.objects.get(id=idMisura)
+        ingredienti = Ingrediente.objects.filter(idMisura = misura)
+        if ingredienti.count() == 0:
+            misura.delete()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Misura Eliminata!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Misura utilizzata in uno o più ingredienti!"})
+    else:
+        return Error
+
+##Categorie
+@login_required()
+def categorie(request):
+    form = CategoriaForm()
+    return render(request, 'categorie/categorie.html', {'form':form, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Categoria') })
+
+@login_required
+def tabellaCategorie(request):
+    categorie = Categoria.objects.all()
+    return render(request, 'categorie/tabellaCategorie.html', {'categorie' : categorie,'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Categoria')})
+
+@login_required()
+def nuovaCategoria(request):
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST)
+        if form.is_valid():
+            nuovaCategoria = Categoria(nome = form.cleaned_data['nome'])
+            nuovaCategoria.save()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
+    else:      
+        return Error
+
+@login_required
+def modificaCategoria(request):
+    if request.method == 'POST':
+        idCategoria = request.POST['idCategoria']
+        categoria = Categoria.objects.get(id=idCategoria)
+        form = CategoriaForm(initial={'nome':categoria.nome})
+
+        return render(request, 'categorie/modificaCategoria.html', {'idCategoria':idCategoria, 'form':form})
+    else:
+        return Error
+
+@login_required
+def applicaModificheCategoria(request):
+    if request.method == 'POST':
+        form = MisuraForm(request.POST)
+        idCategoria = request.POST['idCategoria']
+        if form.is_valid():
+            categoria = Categoria.objects.get(id=idCategoria)
+            categoria.nome = form.cleaned_data['nome']
+            categoria.save()
+
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
+    else:
+        return Error
+    
+@login_required()
+def eliminaCategoria(request):
+    if request.method == 'POST':
+        idCategoria = request.POST['idCategoria']
+        categoria = Categoria.objects.get(id=idCategoria)
+        piatti = Piatto.objects.filter(idCategoria = categoria)
+        if piatti.count() == 0:
+            categoria.delete()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Categoria Eliminata!"})
+        else:
+            return render(request, 'operazioneFallita.html', {'messaggio':"Categoria presente in uno o più piatti!"})
     else:
         return Error

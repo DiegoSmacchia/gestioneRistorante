@@ -1,0 +1,53 @@
+{% extends 'navbar.html' %}
+
+{% load static %}
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/tabella.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <div id="divNotifica"></div>
+  </div>
+</div>
+<div class="row">
+  {% if permessiAzioni %}
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <form hx-post="{% url 'nuovaCategoria' %}" hx-target="#divNotifica" class="formInserimento">
+      <div x-data="{ inserimento: false }">
+        <div class="row">
+          <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = true" x-show="!inserimento">Nuova Categoria</button>
+        </div>
+        
+        <div x-show="inserimento">
+          <div class="row">
+            <button type="button" class="btn btn-primary buttonAzione" @click="inserimento = false">Annulla Inserimento</button>
+            <button type="submit" class="btn btn-success buttonAzione">Conferma Inserimento</button>
+          </div>
+          <br>
+          {% csrf_token %}
+          <div class="row">
+            <div class="col-sm-12 col-md-3">
+              {{form.nome.label}}
+            </div>
+            <div class="col-sm-12 col-md-9">
+              {{form.nome}}
+            </div>
+          </div>  
+          <br>
+          
+        </div>
+      
+      </div>
+    </form>
+  </div>
+  {% endif %}
+</div>
+
+
+<div hx-get="{% url 'tabellaCategorie' %}" hx-trigger="every 1s">
+  <div class="loader"></div>
+</div>
+{% endblock %}
