@@ -1,6 +1,7 @@
 from msilib.schema import Error
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from numpy import identity
 
 from .forms import ScortaForm
 from .models import Preparazione, Scorta, Spesa
@@ -13,8 +14,7 @@ def gestioneMagazzino(request):
 @login_required
 def scorte(request):
     form = ScortaForm()
-    scorte = Scorta.objects.all()
-    return render(request, 'scorte/scorte.html', {'form':form,'scorte':scorte, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Scorta') })
+    return render(request, 'scorte/scorte.html', {'form':form, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Scorta') })
 
 @login_required
 def tabellaScorte(request):
@@ -27,12 +27,17 @@ def nuovaScorta(request):
         form = ScortaForm(request.POST)
         
         if form.is_valid():
-            
-            nuovaScorta = Scorta(idIngrediente = form.cleaned_data['idIngrediente'], 
+            try:
+                scortaEsistente = Scorta.objects.get(idIngrediente = form.cleaned_data['idIngrediente'])
+                if scortaEsistente is not None:
+                    return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ingrediente già presente!"})
+            except Scorta.DoesNotExist:
+                nuovaScorta = Scorta(idIngrediente = form.cleaned_data['idIngrediente'], 
                                 quantitaAttuale = form.cleaned_data['quantitaAttuale'], 
                                 quantitaMinima = form.cleaned_data['quantitaMinima'])
-            nuovaScorta.save()
-            return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
+                nuovaScorta.save()
+                aggiornaListe(nuovaScorta)
+                return render(request, 'operazioneRiuscita.html', {'messaggio':"Inserimento Riuscito!"})
         else:
             print(form)
             return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ricontrollare i campi!"})
@@ -54,13 +59,15 @@ def modificaScorta(request):
 def applicaModificheScorta(request):
     if request.method == 'POST':
         form = ScortaForm(request.POST)
-        idSscorta = request.POST['idScorta']
+        idScorta = request.POST['idScorta']
+        print(form)
         if form.is_valid():
-            scorta = Scorta.objects.get(id=idSscorta)
+            scorta = Scorta.objects.get(id=idScorta)
             scorta.idIngrediente = form.cleaned_data['idIngrediente']
             scorta.quantitaAttuale = form.cleaned_data['quantitaAttuale']
             scorta.quantitaMinima = form.cleaned_data['quantitaMinima']
             scorta.save()
+            aggiornaListe(scorta)
             return render(request, 'operazioneRiuscita.html', {'messaggio':"Modifica Riuscita!"})
         else:
             return render(request, 'operazioneFallita.html', {'messaggio':"Modifica fallita, ricontrollare i campi!"})
@@ -77,16 +84,86 @@ def eliminaScorta(request):
     else:
         return Error
 
-
 #Spese
 @login_required
 def spese(request):
-    spese = Spesa.objects.all()
-    return render(request, 'spese/tabellaSpese.html', {'spese':spese, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Scorta') })
+    return render(request, 'spese/spese.html')
 
+@login_required
+def tabellaSpese(request):
+    spese = Spesa.objects.all()
+    return render(request, 'spese/tabellaSpese.html', {'spese':spese,'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Spesa')})
+
+@login_required
+def effettuaSpese(request):
+    if(request.method == 'POST'):
+        spese = Spesa.objects.all()
+        for spesa in spese:
+            scorta = Scorta.objects.get(id = spesa.idScorta.id)
+            scorta.quantitaAttuale = scorta.quantitaMinima
+            scorta.save()
+            aggiornaListe(scorta)
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Lista della spesa svuotata!"})
+    else:
+        return Error
 
 #Preparazioni
 @login_required
 def preparazioni(request):
+    return render(request, 'preparazioni/preparazioni.html')
+
+@login_required
+def tabellaPreparazioni(request):
     preparazioni = Preparazione.objects.all()
-    return render(request, 'preparazioni/tabellaPreparazioni.html', {'preparazioni':preparazioni, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Scorta') })
+    return render(request, 'preparazioni/tabellaPreparazioni.html', {'preparazioni':preparazioni, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Preparazione') })
+
+
+@login_required
+def effettuaPreparazioni(request):
+    if(request.method == 'POST'):
+        preparazioni = Preparazione.objects.all()
+        for preparazione in preparazioni:
+            scorta = Scorta.objects.get(id = preparazione.idScorta)
+            scorta.quantitaAttuale = scorta.quantitaMinima
+            scorta.save()
+            aggiornaListe(scorta)
+            return render(request, 'operazioneRiuscita.html', {'messaggio':"Lista delle preparazioni svuotata!"})
+    else:
+        return Error
+
+def aggiornaListe(scorta):
+    if(scorta.quantitaAttuale < scorta.quantitaMinima):
+        if(scorta.quantitaAttuale > 0 ):
+            urgenza = 1
+        else:
+            urgenza = 2
+ 
+        if(scorta.idIngrediente.fattoInCasa):
+            try:
+                preparazione = Preparazione.objects.get(idScorta = scorta)
+            except Preparazione.DoesNotExist:
+                preparazione = Preparazione(idScorta = scorta)
+            preparazione.urgenza = urgenza
+            preparazione.quantita = scorta.quantitaMinima - scorta.quantitaAttuale
+            preparazione.save()
+        else:
+            try:
+                spesa = Spesa.objects.get(idScorta = scorta)
+            except Spesa.DoesNotExist:
+                spesa = Spesa(idScorta = scorta)
+            spesa.urgenza = urgenza
+            spesa.quantita = scorta.quantitaMinima - scorta.quantitaAttuale
+            spesa.save()
+    else:
+        if(scorta.idIngrediente.fattoInCasa):
+            try:
+                preparazione = Preparazione.objects.get(idScorta = scorta)
+                preparazione.delete()
+            except Preparazione.DoesNotExist:
+                print("Preparazione inesistente")
+        else:
+            try:
+                spesa = Spesa.objects.get(idScorta = scorta)
+                spesa.delete()
+            except Spesa.DoesNotExist:
+                print("Spesa inesistente.")

@@ -1,0 +1,43 @@
+{% if spese.count > 0 %}
+<div class="row">
+    {% if permessiAzioni %}
+    <div class="col-sm-12 col-md-6 col-lg-4">
+        <form hx-post="{% url 'effettuaSpese' %}" hx-target="#divNotifica">
+            <div class="row">
+                <button type="submit" class="btn btn-primary buttonAzione">Effettua Spese</button>
+                {% csrf_token %}
+            </div>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<table class="table table-primary">
+    <thead>
+      <tr>
+        <th scope="col">Ingrediente</th>
+        <th scope="col">Quantità Minima Richiesta</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for spesa in spese %}
+        <tr {% if spesa.idScorta.quantitaAttuale <= 0 %} class="urgente" {% endif %}>
+            <td>
+              {{ spesa.idScorta.idIngrediente }}
+            </td>
+            <td>
+              {{ spesa.quantita }} {{spesa.idScorta.idIngrediente.idMisura}}
+            </td>
+        </tr>
+
+        {% endfor %}
+      
+    </tbody>
+  </table>
+{% else %}
+<div class="centrato">
+    <i class="fas fa-check fa-8x"></i>
+    <br>
+    Nessun elemento nella lista della spesa.
+</div>
+{% endif %}

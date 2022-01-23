@@ -1,0 +1,41 @@
+<form hx-post="{% url 'applicaModificheScorta' %}" class="formInserimento">
+      
+    <div>
+      <div class="row">
+        <button type="submit" class="btn btn-success buttonAzione">Conferma Modifica</button>
+      </div>
+  
+      <br>
+      {% csrf_token %}
+      <div class="row">
+        <div class="col-sm-12 col-md-3">
+          {{form.idIngrediente.label}}
+        </div>
+        <div class="col-sm-12 col-md-9">
+          {{form.idIngrediente}}
+        </div>
+      </div>  
+      <br>
+      <div class="row">
+        <div class="col-sm-12 col-md-3">
+          {{form.quantitaAttuale.label}}
+        </div>
+        <div class="col-sm-12 col-md-9">
+          {{form.quantitaAttuale}}
+        </div>
+      </div>
+      <br>
+      <div class="row">
+        <div class="col-sm-12 col-md-3">
+          {{form.quantitaMinima.label}}
+        </div>
+        <div class="col-sm-12 col-md-9">
+          {{form.quantitaMinima}}
+        </div>
+      </div>
+      <input type="hidden" value="{{ idScorta }}" name="idScorta">
+      <br>
+  
+      
+    </div>
+</form>
