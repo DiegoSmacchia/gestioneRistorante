@@ -22,5 +22,7 @@ urlpatterns = [
     path('login/', include('gestioneUtenti.urls')),
     path('menu/', include('gestioneMenu.urls')),
     path('sala/', include('gestioneSala.urls')),
-    path('magazzino/', include('gestioneMagazzino.urls'))
+    path('magazzino/', include('gestioneMagazzino.urls')),
+    path('cucina/', include('gestioneCucina.urls'))
+    
 ]

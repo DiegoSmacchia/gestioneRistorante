@@ -59,3 +59,6 @@ def nuovoUtente(request):
     else:
         form = UtenteForm()    
         return render(request, "registrazione.html", { 'form':form })
+
+def confirmLogout(request):
+    return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Logout', 'contenuto':'Vuoi Effettuare il Logout?', 'urlrichiesto':'effettuaLogout', 'hxtarget':'#contenutoTotale'})

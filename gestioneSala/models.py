@@ -46,6 +46,7 @@ class ComponenteOrdine(models.Model):
     uscita = models.IntegerField(validators=[MinValueValidator(0)])
     variazioni = models.CharField(max_length=100, blank=True)
     stato = models.ForeignKey(Stato, on_delete=CASCADE)
+    priorita = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     class Meta:
         verbose_name = 'ComponenteOrdine'
         verbose_name_plural = 'ComponentiOrdini'

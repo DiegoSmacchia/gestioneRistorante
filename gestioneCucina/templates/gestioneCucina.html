@@ -1,0 +1,33 @@
+{% extends 'navbar.html' %}
+{% load static %}
+
+
+{% block contentHead %}
+<link rel="stylesheet" href="{% static 'css/cucina.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div >
+  <form hx-post="{% url 'alagi' %}" hx-target="#dialog">
+    {% csrf_token %}
+    <button type="submit">Open Modal</button>
+  </form>
+
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4">
+      <div id="divNotifica"></div>
+      <br>
+    </div>
+</div>
+</div>
+
+
+<div class="container-fluid" hx-get="{% url 'contenutoCucina' %}" hx-trigger="every 1s">
+    <div class="loader"></div>
+</div>
+{% endblock %}

@@ -1,15 +1,21 @@
 {% extends 'common.html' %}
 
 {% block contentPrincipale %}
+<div id="contenutoTotale" x-data="{dialogOpen : false}">
+    <div class="overlay" x-show="dialogOpen"></div>
     <nav class="navbar navbar-dark bg-primary">
         <a class="navbar-brand" href="{% url 'home' %}">&nbsp;&nbsp;&nbsp;Gestione Ristorante</a>
         <form class="formLogout" method="POST" action="{% url 'effettuaLogout' %}">
             {% csrf_token %}
-            <button type="submit" class="buttonLogout" onclick="return confirm('Vuoi effettuare il logout?')"><i class="fas fa-sign-out-alt iconaLogout"></i></button>
+            <button type="submit" class="buttonLogout" hx-get="{%url 'confirmLogout' %}" hx-target="#dialog" @click="dialogOpen=true"><i class="fas fa-sign-out-alt iconaLogout"></i></button>
         </form>
     </nav>
     <br>
+    
+    <div id="dialog"></div>
     {% block content %}
     {% endblock %}
+</div>
+    
 
 {% endblock %}

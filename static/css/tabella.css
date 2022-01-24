@@ -11,37 +11,6 @@ label {
 
 input { padding-left: 2px;}
 
-.divSuccess{
-    background-color: #198754;
-    border-radius: 10px;
-    padding: 10px;
-}
-.divError{
-    background-color: #dc3545;
-    border-radius: 10px;
-    padding: 10px;
-}
-.buttonCloseSuccess{
-    width: 10%;
-    border-radius: 50px;
-    background-color: #198754;
-    border: 1px solid #f1f1f1;
-    position: relative;
-    top: 0;
-    right: 0;
-}
-.buttonCloseError{
-    width: 10%;
-    border-radius: 50px;
-    background-color: #dc3545;
-    border: 1px solid #f1f1f1;
-    position: relative;
-    top: 0;
-    right: 0;
-}
-span{
-    font-size: large !important;
-}
 @media only screen and (max-width: 600px) {
     .buttonAzione, .divSuccess{
         margin-left: 3%;

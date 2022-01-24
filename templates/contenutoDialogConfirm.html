@@ -1,0 +1,27 @@
+
+<dv x-show="dialogOpen" @click.away="dialogOpen = false"  class="dialog" >
+    <div>
+        <h2>{{titolo}}</h2>
+    </div>
+    <hr>
+    <div>
+      {{contenuto}}
+    <br><br>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-0 col-md-4"></div>
+            <div class="col-sm-12 col-md-2">
+                <button class="btn btn-danger" @click="dialogOpen = false">Annulla</button>
+            </div>
+            <br class="mobileOnly"><br class="mobileOnly">
+            <div class="col-sm-12 col-md-2">
+                <form hx-post="{% url urlrichiesto %}" hx-target={{hxtarget}}>
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success" @click="dialogOpen = false">Conferma</button>
+                </form>
+            </div>
+            <div class="col-sm-0 col-md-4"></div>
+        </div>
+    </div>
+      
+</div>

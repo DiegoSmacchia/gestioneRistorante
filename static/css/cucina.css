@@ -1,0 +1,51 @@
+.ordiniPreparazione{
+    border:1px solid black;
+    padding:3px;
+    margin-left: 1%;
+    margin-right: 1%;
+}
+.ordiniAttesa{
+    border: 1px solid black;
+}
+.ordine{
+    padding:2px;
+    border: 1px solid gray;
+}
+.buttonSubmit{
+    border:none;
+    background-color: #e6e6e6;
+}
+
+@media only screen and (max-width: 769px) {
+    .ordiniPreparazione{
+        border:1px solid black;
+        padding:3px;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-bottom: 1%;
+    }
+    .ordiniAttesa{
+        border: 1px solid black;
+        width: 98%;
+        margin-left: 1%;
+        margin-right: 1%;
+        margin-top: 1%;
+    }
+}
+@media only screen and (min-width: 770px) {
+    .divNotifica{
+        margin-left: 3% !important;
+    }
+    .ordiniPreparazione{
+        border:1px solid black;
+        padding:3px;
+        margin-left: 3%;
+        margin-right: 1%;
+    }
+    .ordiniAttesa{
+        border: 1px solid black;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+}
