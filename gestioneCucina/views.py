@@ -6,7 +6,7 @@ from gestioneSala.models import Ordine, ComponenteOrdine, Stato
 # Create your views here.
 @login_required
 def gestioneCucina(request):
-    return render(request, 'gestioneCucina.html', {'test':"alagi"})
+    return render(request, 'gestioneCucina.html')
 
 @login_required
 def contenutoCucina(request):
@@ -48,6 +48,3 @@ def inizioPreparazioneComponente(request):
         return render(request, 'operazioneRiuscita.html', {'messaggio':'componente segnato come servito!'})
     else:
         return Error
-    
-def alagi(request):
-    return render(request, 'contenutoDialogConfirm.html', {'titolo':'aaaaaaaaa', 'contenuto':'bbbbbbbbb', 'urlrichiesto':'alagi'})

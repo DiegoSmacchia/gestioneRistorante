@@ -8,14 +8,6 @@
 
 {% block content %}
 
-<div >
-  <form hx-post="{% url 'alagi' %}" hx-target="#dialog">
-    {% csrf_token %}
-    <button type="submit">Open Modal</button>
-  </form>
-
-</div>
-
 
 <div class="container-fluid">
   <div class="row">
