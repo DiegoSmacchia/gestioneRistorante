@@ -74,12 +74,24 @@ def applicaInserimentoModificaScorta(request):
         return Error
     
 @login_required
+def confirmEliminaScorta(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa scorta?', 
+                                                            'urlrichiesto':'eliminaScorta', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idScorta'],
+                                                            'nomeparametro':'idScorta'})
+    else:
+        return Error
+
+@login_required
 def eliminaScorta(request):
     if request.method == 'POST':
         idScorta = request.POST['idScorta']
         scorta = Scorta.objects.get(id=idScorta)
         scorta.delete()
-        return render(request, 'operazioneRiuscita.html', {'messaggio':"Ingrediente Eliminato!"})
+        return render(request, 'operazioneRiuscita.html', {'messaggio':"Scorta Eliminata!"})
     else:
         return Error
 
@@ -131,6 +143,9 @@ def effettuaPreparazioni(request):
         return Error
 
 def aggiornaListe(scorta):
+    print("Aggiorno.........")
+    print(scorta.quantitaAttuale)
+    print(scorta.quantitaMinima)
     if(scorta.quantitaAttuale < scorta.quantitaMinima):
         if(scorta.quantitaAttuale > 0 ):
             urgenza = 1

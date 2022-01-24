@@ -1,8 +1,14 @@
 from aifc import Error
 from datetime import datetime
+from decimal import Decimal
+from django.forms import FloatField
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from gestioneMenu.models import IngredientePiatto
+from gestioneMagazzino.models import Scorta
 from gestioneSala.models import Ordine, ComponenteOrdine, Stato
+from gestioneMagazzino.views import aggiornaListe
+
 # Create your views here.
 @login_required
 def gestioneCucina(request):
@@ -34,6 +40,19 @@ def componenteServito(request):
         idComponente = request.POST['idComponente']
         componente = ComponenteOrdine.objects.get(id = idComponente)
         componente.stato = Stato.objects.get(id = 3)
+
+        ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
+        for ingrediente in ingredientiPiatto:
+            try:
+                scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                print(ingrediente.quantita)
+                scorta.quantitaAttuale -= float(Decimal(ingrediente.quantita) * componente.quantita)
+                scorta.save() 
+                aggiornaListe(scorta)
+            
+            except Scorta.DoesNotExist:
+                print("Scorta Inesistente.")
+
         componente.save()
         return render(request, 'operazioneRiuscita.html', {'messaggio':'componente segnato come servito!'})
     else:
@@ -45,6 +64,6 @@ def inizioPreparazioneComponente(request):
         componente = ComponenteOrdine.objects.get(id = idComponente)
         componente.stato = Stato.objects.get(id = 2)
         componente.save()
-        return render(request, 'operazioneRiuscita.html', {'messaggio':'componente segnato come servito!'})
+        return render(request, 'operazioneRiuscita.html', {'messaggio':'componente aggiunto alla lista in preparazione!'})
     else:
         return Error

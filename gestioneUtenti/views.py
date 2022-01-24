@@ -34,24 +34,24 @@ def registrazione(request):
 def nuovoUtente(request):
     if request.method == 'POST':
         form = UtenteForm(request.POST)
-        # check whether it's valid:
         if form.is_valid():
-            print(form.cleaned_data)
-            # process the data in form.cleaned_data as required
-            nuovoUtente = User(username = form.cleaned_data['username'],
+            if User.objects.filter(username = form.cleaned_data['username']):
+                return render(request, "registrazioneErrore.html", { 'form':form, 'messaggio':'Nome utente già presente.' })
+            else:
+                nuovoUtente = User(username = form.cleaned_data['username'],
                                 password = form.cleaned_data['password'],
                                 first_name = form.cleaned_data['nome'],
                                 last_name = form.cleaned_data['cognome'],
                                 email = form.cleaned_data['email'])
-            try:
-                validate_password(nuovoUtente.password, user=nuovoUtente, password_validators=[MinimumLengthValidator(8), UserAttributeSimilarityValidator(),CommonPasswordValidator(),NumericPasswordValidator()])
-                newUtente = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
-                newUtente.save()
-            except ValidationError as errori:
-                erroreHTML = ""
-                for errore in errori:
-                    erroreHTML += errore + " "
-                return render(request, "registrazioneErrore.html", { 'form':form, 'messaggio':erroreHTML })
+                try:
+                    validate_password(nuovoUtente.password, user=nuovoUtente, password_validators=[MinimumLengthValidator(8), UserAttributeSimilarityValidator(),CommonPasswordValidator(),NumericPasswordValidator()])
+                    newUtente = User.objects.create_user(form.cleaned_data['username'], form.cleaned_data['email'], form.cleaned_data['password'])
+                    newUtente.save()
+                except ValidationError as errori:
+                    erroreHTML = ""
+                    for errore in errori:
+                        erroreHTML += errore + " "
+                    return render(request, "registrazioneErrore.html", { 'form':form, 'messaggio':erroreHTML })
 
             return redirect('home')
         else:

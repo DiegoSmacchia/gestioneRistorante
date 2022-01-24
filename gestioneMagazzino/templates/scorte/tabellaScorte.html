@@ -32,10 +32,10 @@
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaScorta' %}" hx-target="#divNotifica">
+                  <form hx-post="{% url 'confirmEliminaScorta' %}" hx-target="#dialog" @click="dialogOpen = true">
                     <input type="hidden" value="{{scorta.id}}" name="idScorta">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa scorta?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
 

@@ -40,7 +40,7 @@ def modificaIngrediente(request):
     else:
         return Error
 
-@login_required()
+@login_required
 def applicaInserimentoModificaIngrediente(request):
     if request.method == 'POST':
         form = IngredienteForm(request.POST)
@@ -61,7 +61,19 @@ def applicaInserimentoModificaIngrediente(request):
     else:
         return Error
     
-@login_required()
+@login_required
+def confirmEliminaIngrediente(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questo ingrediente?', 
+                                                            'urlrichiesto':'eliminaIngrediente', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idIngrediente'],
+                                                            'nomeparametro':'idIngrediente'})
+    else:
+        return Error
+
+@login_required
 def eliminaIngrediente(request):
     if request.method == 'POST':
         idIngrediente = request.POST['idIngrediente']
@@ -125,6 +137,18 @@ def applicaInserimentoModificaPiatto(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaPiatto(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questo piatto?', 
+                                                            'urlrichiesto':'eliminaPiatto', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idPiatto'],
+                                                            'nomeparametro':'idPiatto'})
+    else:
+        return Error
+
 @login_required()
 def eliminaPiatto(request):
     if request.method == 'POST':
@@ -181,6 +205,18 @@ def applicaInserimentoModificaIngredientePiatto(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaIngredientePiatto(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questo ingrediente del piatto?', 
+                                                            'urlrichiesto':'eliminaIngredientePiatto', 
+                                                            'hxtarget':'#divNotificaIngredientePiatto',
+                                                            'parametro':request.POST['idIngredientePiatto'],
+                                                            'nomeparametro':'idIngredientePiatto'})
+    else:
+        return Error
+
 @login_required()
 def eliminaIngredientePiatto(request):
     if request.method == 'POST':
@@ -249,6 +285,18 @@ def applicaAggiuntaMenu(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaPiattoMenu(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questo piatto dal menu?', 
+                                                            'urlrichiesto':'eliminaPiattoMenu', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idPiatto'],
+                                                            'nomeparametro':'idPiatto'})
+    else:
+        return Error
+
 @login_required()
 def eliminaPiattoMenu(request):
     if request.method == 'POST':
@@ -309,6 +357,18 @@ def applicaInserimentoModificaMisura(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaMisura(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa misura?', 
+                                                            'urlrichiesto':'eliminaMisura', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idMisura'],
+                                                            'nomeparametro':'idMisura'})
+    else:
+        return Error
+
 @login_required()
 def eliminaMisura(request):
     if request.method == 'POST':
@@ -371,7 +431,19 @@ def applicaInserimentoModificaCategoria(request):
             return render(request, 'operazioneFallita.html', {'messaggio':"Operazione fallita, ricontrollare i campi!"})
     else:
         return Error
-    
+
+@login_required
+def confirmEliminaCategoria(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa categoria?', 
+                                                            'urlrichiesto':'eliminaCategoria', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idCategoria'],
+                                                            'nomeparametro':'idCategoria'})
+    else:
+        return Error
+
 @login_required()
 def eliminaCategoria(request):
     if request.method == 'POST':

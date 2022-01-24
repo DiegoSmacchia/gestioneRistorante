@@ -2,7 +2,7 @@
 
 {% block contentPrincipale %}
 <div id="contenutoTotale" x-data="{dialogOpen : false}">
-    <div class="overlay" x-show="dialogOpen"></div>
+    <div class="overlay" x-cloak x-show="dialogOpen"></div>
     <nav class="navbar navbar-dark bg-primary">
         <a class="navbar-brand" href="{% url 'home' %}">&nbsp;&nbsp;&nbsp;Gestione Ristorante</a>
         <form class="formLogout" method="POST" action="{% url 'effettuaLogout' %}">

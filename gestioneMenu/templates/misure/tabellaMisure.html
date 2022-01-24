@@ -24,10 +24,10 @@
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaMisura' %}" hx-target="#divNotifica">
+                  <form hx-post="{% url 'confirmEliminaMisura' %}" hx-target="#dialog" @click="dialogOpen = true">
                     <input type="hidden" value="{{misura.id}}" name="idMisura">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa misura?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
 

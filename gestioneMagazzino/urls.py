@@ -8,6 +8,7 @@ urlpatterns = [
     path('nuovaScorta', views.nuovaScorta, name='nuovaScorta'),
     path('modificaScorta', views.modificaScorta, name='modificaScorta'),
     path('applicaInserimentoModificaScorta', views.applicaInserimentoModificaScorta, name='applicaInserimentoModificaScorta'),
+    path('confirmEliminaScorta', views.confirmEliminaScorta, name='confirmEliminaScorta'),
     path('eliminaScorta', views.eliminaScorta, name='eliminaScorta'),
 
     path('spese', views.spese, name='spese'),

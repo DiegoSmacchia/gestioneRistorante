@@ -72,6 +72,18 @@ def applicaInserimentoModificaSala(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaSala(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa sala?', 
+                                                            'urlrichiesto':'eliminaSala', 
+                                                            'hxtarget':'#divNotifica',
+                                                            'parametro':request.POST['idSala'],
+                                                            'nomeparametro':'idSala'})
+    else:
+        return Error
+
 @login_required()
 def eliminaSala(request):
     if request.method == 'POST':
@@ -125,6 +137,18 @@ def applicaInserimentoModificaTavolo(request):
     else:
         return Error
     
+@login_required
+def confirmEliminaTavolo(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questo tavolo?', 
+                                                            'urlrichiesto':'eliminaTavolo', 
+                                                            'hxtarget':'#divNotificaTavolo',
+                                                            'parametro':request.POST['idTavolo'],
+                                                            'nomeparametro':'idTavolo'})
+    else:
+        return Error
+
 @login_required()
 def eliminaTavolo(request):
     if request.method == 'POST':
@@ -138,7 +162,7 @@ def eliminaTavolo(request):
 ##Ordini
 @login_required
 def ordini(request):
-    tavoli = Tavolo.objects.all()
+    tavoli = Tavolo.objects.all().order_by['idSala']
     ordini = Ordine.objects.all()
     tavoliOrdinato = []
     for ordine in ordini:
@@ -247,6 +271,18 @@ def confermaAggiuntaComponenti(request):
         return Error
 
 @login_required
+def confirmEliminaComponenteTemporaneo(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa parte di ordine?', 
+                                                            'urlrichiesto':'eliminaComponenteTemporaneo', 
+                                                            'hxtarget':'#divComponenteTemporaneo',
+                                                            'parametro':request.POST['idComponente'],
+                                                            'nomeparametro':'idComponente'})
+    else:
+        return Error
+
+@login_required
 def eliminaComponenteTemporaneo(request):
     if request.method == "POST":
         idComponente = request.POST['idComponente']
@@ -290,6 +326,18 @@ def applicaModificheComponenteOrdine(request):
         return Error
 
  
+@login_required
+def confirmEliminaComponenteOrdine(request):
+    if request.method =='POST':
+        return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Eliminazione', 
+                                                            'contenuto':'Vuoi davvero eliminare questa parte di ordine?', 
+                                                            'urlrichiesto':'eliminaComponenteOrdine', 
+                                                            'hxtarget':'#divModificaComponente',
+                                                            'parametro':request.POST['idComponente'],
+                                                            'nomeparametro':'idComponente'})
+    else:
+        return Error
+
 @login_required()
 def eliminaComponenteOrdine(request):
     if request.method == 'POST':

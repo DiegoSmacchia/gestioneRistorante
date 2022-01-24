@@ -1,7 +1,6 @@
 <table class="table table-primary">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Sala</th>
         <th scope="col">Nome</th>
         {% if permessiAzioni %}
@@ -12,9 +11,6 @@
     <tbody>
         {% for tavolo in tavoli %}
         <tr>
-            <th scope="row">
-              {{ tavolo.id }}
-            </th>
             <td>
                 {{ tavolo.idSala }}
             </td>
@@ -33,10 +29,10 @@
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaTavolo' %}" hx-target="#divNotificaTavolo">
+                  <form hx-post="{% url 'confirmEliminaTavolo' %}" hx-target="#dialog" @click="dialogOpen = true">
                     <input type="hidden" value="{{tavolo.id}}" name="idTavolo">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo tavolo?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
                 

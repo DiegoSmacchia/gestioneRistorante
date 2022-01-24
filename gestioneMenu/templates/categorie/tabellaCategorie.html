@@ -24,10 +24,10 @@
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaCategoria' %}" hx-target="#divNotifica">
+                  <form hx-post="{% url 'confirmEliminaCategoria' %}" hx-target="#dialog" @click="dialogOpen=true">
                     <input type="hidden" value="{{categoria.id}}" name="idCategoria">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa categoria?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
               </div>

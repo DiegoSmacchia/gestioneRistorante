@@ -1,3 +1,5 @@
+[x-cloak] { display: none !important; }
+
 body{
     background-color: #e6e6e6;
 }
@@ -11,15 +13,14 @@ a, a:hover{
 .contenutoCategoria{
     padding: 10px;
     background-color: rgb(30,109,255);
-    border: 1px solid black;
     border-radius: 10px;
     text-align: center;
     font-size: larger;  
     transition: background-color 0.5s ease-out;
-    color: white;
+    color: #dddddd;
 }
 .contenutoCategoria:hover{
-    background-color: rgb(144, 183, 255);
+    background-color: rgb(0, 70, 201);
 }
 @media only screen and (max-width: 600px) {
     .contenutoCategoria{
@@ -102,7 +103,7 @@ span{
     font-size: large !important;
 }
 .dialog{
-    padding:5px;
+    padding:20px;
     text-align: center;
     align-items: center;
     background-color: white;

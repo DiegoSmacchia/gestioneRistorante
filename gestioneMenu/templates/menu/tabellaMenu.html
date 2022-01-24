@@ -1,7 +1,6 @@
 <table class="table table-primary">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Piatto</th>
         <th scope="col">Descrizione</th>
         <th scope="col">Prezzo</th>
@@ -13,9 +12,6 @@
     <tbody>
         {% for piatto in menu %}
         <tr>
-            <th scope="row">
-              {{ piatto.id}}
-            </th>
             <td>
                 {{ piatto.idPiatto }}
             </td>
@@ -28,12 +24,11 @@
             {% if permessiAzioni %}
             <td>
               <div class="row">
-                
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaPiattoMenu' %}" hx-target="#divNotifica">
+                  <form hx-post="{% url 'confirmEliminaPiattoMenu' %}" hx-target="#dialog" @click="dialogOpen=true">
                     <input type="hidden" value="{{piatto.id}}" name="idPiatto">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo piatto dal menu?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
                 

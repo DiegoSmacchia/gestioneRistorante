@@ -17,6 +17,10 @@
             <div class="col-sm-12 col-md-2">
                 <form hx-post="{% url urlrichiesto %}" hx-target={{hxtarget}}>
                     {% csrf_token %}
+                    {% if parametro %}
+                    <input type="hidden" value={{parametro}} name={{nomeparametro}}>
+                    {% endif %}
+
                     <button type="submit" class="btn btn-success" @click="dialogOpen = false">Conferma</button>
                 </form>
             </div>

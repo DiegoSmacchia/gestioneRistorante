@@ -1,7 +1,6 @@
 <table class="table table-primary">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Nome</th>
         <th scope="col">Categoria</th>
         <th scope="col">Tempo Preparazione</th>
@@ -14,9 +13,6 @@
     <tbody>
         {% for piatto in piattiNonMenu %}
         <tr>
-            <th scope="row">
-              {{ piatto.id}}
-            </th>
             <td>
                 {{ piatto.nome }}
             </td>

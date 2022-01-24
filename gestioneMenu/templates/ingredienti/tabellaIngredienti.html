@@ -1,7 +1,6 @@
 <table class="table table-primary">
     <thead>
       <tr>
-        <th scope="col">#</th>
         <th scope="col">Nome</th>
         <th scope="col">Misura</th>
         <th scope="col">Fatto in Casa</th>
@@ -13,9 +12,6 @@
     <tbody>
         {% for ingrediente in ingredienti %}
         <tr>
-            <th scope="row">
-              {{ ingrediente.id}}
-            </th>
             <td>
               {{ ingrediente.nome }}
             </td>
@@ -40,10 +36,10 @@
                   </form>
                 </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaIngrediente' %}" hx-target="#divNotifica">
+                  <form hx-post="{% url 'confirmEliminaIngrediente' %}" hx-target="#dialog" @click="dialogOpen=true">
                     <input type="hidden" value="{{ingrediente.id}}" name="idIngrediente">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questo ingrediente?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
 

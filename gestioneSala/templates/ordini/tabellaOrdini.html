@@ -44,10 +44,10 @@
                     </form>
                   </div>
                 <div class="col-sm-6 col-md-3">
-                  <form hx-post="{% url 'eliminaComponenteOrdine' %}" hx-target="#divModificaComponente">
+                  <form hx-post="{% url 'confirmEliminaComponenteOrdine' %}" hx-target="#dialog" @click="dialogOpen = true">
                     <input type="hidden" value="{{componente.id}}" name="idComponente">
                     {% csrf_token %}
-                    <button type="submit" onclick="return confirm('Vuoi davvero eliminare questa parte di ordine?')" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                   </form>
                 </div>
               </div>              
@@ -94,12 +94,12 @@ nessun Ordine confermato.
                     {{componente.variazioni}}
                 </td>
                 <td>
-                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-target="#divComponenteTemporaneo">
-                        <input type="hidden" value="{{componente.id}}" name="idComponente">
-                        <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
-                        {% csrf_token %}
-                        <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
-                      </form>
+                  <form hx-post="{% url 'confirmEliminaComponenteTemporaneo' %}"  hx-target="#dialog" @click="dialogOpen = true">
+                    <input type="hidden" value="{{componente.id}}" name="idComponente">
+                    <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
+                    {% csrf_token %}
+                    <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
+                  </form>
                 </td>
             </tr>
             {% endfor %}
