@@ -16,6 +16,7 @@ a, a:hover{
     text-align: center;
     font-size: larger;  
     transition: background-color 0.5s ease-out;
+    color: white;
 }
 .contenutoCategoria:hover{
     background-color: rgb(144, 183, 255);
