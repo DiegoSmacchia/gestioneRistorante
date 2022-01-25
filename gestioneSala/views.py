@@ -62,6 +62,8 @@ def applicaInserimentoModificaSala(request):
         if form.is_valid():
             if idSala == '0':
                 sala = Sala()
+                if Sala.objects.filter(nome = form.cleaned_data['nome']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, sala già presente!'})
             else:
                 sala = Sala.objects.get(id=idSala)
             sala.nome = form.cleaned_data['nome']
@@ -126,6 +128,8 @@ def applicaInserimentoModificaTavolo(request):
         if form.is_valid():
             if idTavolo == '0':
                 tavolo = Tavolo()
+                if Tavolo.objects.filter(nome = form.cleaned_data['nome'], idSala = form.cleaned_data['idSala']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, tavolo già presente!'})
             else:
                 tavolo = Tavolo.objects.get(id=idTavolo)
             tavolo.idSala = form.cleaned_data['idSala']

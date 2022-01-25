@@ -51,7 +51,7 @@ def applicaInserimentoModificaScorta(request):
                 try:
                     scortaEsistente = Scorta.objects.get(idIngrediente = form.cleaned_data['idIngrediente'])
                     if scortaEsistente is not None:
-                        return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ingrediente già presente!"})
+                        return render(request, 'operazioneFallita.html', {'messaggio':"Inserimento fallito, ingrediente già presente nella scorta!"})
                 except Scorta.DoesNotExist:
                     scorta = Scorta()
             else:
@@ -143,7 +143,6 @@ def effettuaPreparazioni(request):
         return Error
 
 def aggiornaListe(scorta):
-    print("Aggiorno.........")
     print(scorta.quantitaAttuale)
     print(scorta.quantitaMinima)
     if(scorta.quantitaAttuale < scorta.quantitaMinima):

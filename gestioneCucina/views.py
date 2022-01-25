@@ -49,7 +49,6 @@ def componenteServito(request):
         for ingrediente in ingredientiPiatto:
             try:
                 scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
-                print(ingrediente.quantita)
                 scorta.quantitaAttuale -= float(Decimal(ingrediente.quantita) * componente.quantita)
                 scorta.save() 
                 aggiornaListe(scorta)

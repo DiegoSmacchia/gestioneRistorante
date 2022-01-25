@@ -3,7 +3,7 @@
       <tr>
         <th scope="col">Piatto</th>
         <th scope="col">Ingrediente</th>
-        <th scope="col">Quantita</th>
+        <th scope="col">Quantità</th>
         {% if permessiAzioni %}
           <th scope="col">Azioni</th>
         {% endif %}
@@ -19,7 +19,7 @@
                 {{ ingredientepiatto.idIngrediente }}
             </td>
             <td>
-                {{ ingredientepiatto.quantita }} 
+                {{ ingredientepiatto.quantita }} {{ ingredientepiatto.idIngrediente.idMisura }}
             </td>
             {% if permessiAzioni %}
             <td>

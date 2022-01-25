@@ -48,6 +48,8 @@ def applicaInserimentoModificaIngrediente(request):
         if form.is_valid():
             if idIngrediente == '0':
                 ingrediente = Ingrediente()
+                if Ingrediente.objects.filter(nome = form.cleaned_data['nome']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, ingrediente già presente!'})
             else:
                 ingrediente = Ingrediente.objects.get(id=idIngrediente)
 
@@ -93,7 +95,7 @@ def piatti(request):
 
 @login_required
 def tabellaPiatti(request):
-    piatti = Piatto.objects.all()
+    piatti = Piatto.objects.all().order_by('idCategoria')
     return render(request, 'piatti/tabellaPiatti.html', {'piatti' : piatti, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Piatto')})
 
 
@@ -124,6 +126,8 @@ def applicaInserimentoModificaPiatto(request):
         if form.is_valid():
             if idPiatto == '0':
                 piatto = Piatto()
+                if Piatto.objects.filter(nome = form.cleaned_data['nome']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, piatto già presente!'})
             else:
                 piatto = Piatto.objects.get(id=idPiatto)
             piatto.idCategoria = form.cleaned_data['idCategoria']
@@ -191,6 +195,8 @@ def applicaInserimentoModificaIngredientePiatto(request):
         if form.is_valid():
             if idIngredientePiatto == '0':
                 ingredientePiatto = IngredientePiatto()
+                if IngredientePiatto.objects.filter(idPiatto = form.cleaned_data['idPiatto'], idIngrediente = form.cleaned_data['idIngrediente']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, ingrediente del piatto già presente!'})
             else:
                 ingredientePiatto = IngredientePiatto.objects.get(id=idIngredientePiatto)
             ingredientePiatto.idPiatto = form.cleaned_data['idPiatto']
@@ -233,7 +239,7 @@ def menu(request):
 
 @login_required()
 def tabellaMenu(request):
-    piattiMenu = Menu.objects.all()
+    piattiMenu = Menu.objects.all().order_by('idPiatto')
     return render(request, 'menu/tabellaMenu.html', {'menu' : piattiMenu, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Menu')})
 
 @login_required()
@@ -344,6 +350,8 @@ def applicaInserimentoModificaMisura(request):
             print(idMisura)
             if idMisura == '0':
                 misura = Misura()
+                if Misura.objects.filter(nome = form.cleaned_data['nome']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, misura già presente!'})
             else:
                 misura = Misura.objects.get(id=idMisura)
             misura.nome = form.cleaned_data['nome']
@@ -419,6 +427,8 @@ def applicaInserimentoModificaCategoria(request):
         if form.is_valid():
             if idCategoria == '0':
                 categoria = Categoria()
+                if Categoria.objects.filter(nome = form.cleaned_data['nome']):
+                    return render(request, "operazioneFallita.html", {'messaggio':'Operazione fallita, categoria già presente!'})
             else:
                 categoria = Categoria.objects.get(id=idCategoria)
             categoria.nome = form.cleaned_data['nome']

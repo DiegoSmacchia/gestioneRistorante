@@ -14,7 +14,6 @@ def paginaLogin(request):
 def autenticazione(request):
     if request.method == 'POST':
         user = authenticate(username = request.POST['Username'], password = request.POST['Password'])
-        print(user)
         if user is not None: 
             login(request, user)
             return redirect('home')

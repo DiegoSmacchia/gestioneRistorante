@@ -48,7 +48,7 @@ class IngredientePiatto(models.Model):
 
 class Menu(models.Model):
     idPiatto = models.ForeignKey(Piatto, on_delete=models.CASCADE)
-    descrizione = models.CharField(max_length=200)
+    descrizione = models.CharField(max_length=200, blank=True)
     prezzo = models.FloatField(validators=[MinValueValidator(0)])
     class Meta:
         verbose_name = 'Menu'
