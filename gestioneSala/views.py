@@ -237,7 +237,7 @@ def aggiungiComponenteTemporaneo(request):
             ordineTemporaneo = None
 
         if not ordineTemporaneo:
-            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, uscitaAttuale = 0, orario=datetime.now().time())
+            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, orario=datetime.now().time())
             ordineTemporaneo.save()
         statoIniziale = Stato.objects.get(id = 1)
         componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = statoIniziale)
@@ -257,7 +257,7 @@ def confermaAggiuntaComponenti(request):
         try:
             ordine = Ordine.objects.get(idTavolo = ordineTemporaneo.idTavolo)
         except Ordine.DoesNotExist:
-            ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, uscitaAttuale = ordineTemporaneo.uscitaAttuale, orario=ordineTemporaneo.orario)
+            ordine = Ordine(idTavolo = ordineTemporaneo.idTavolo, orario=ordineTemporaneo.orario)
         ordine.save()
         for componenteTemp in componentiTemporanei:
             componente = ComponenteOrdine(idOrdine = ordine, 

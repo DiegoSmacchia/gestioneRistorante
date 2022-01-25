@@ -33,7 +33,6 @@ class Stato(models.Model):
 
 class Ordine(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
-    uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
     orario = models.TimeField()
     class Meta:
         verbose_name = 'Ordine'
@@ -53,7 +52,6 @@ class ComponenteOrdine(models.Model):
 
 class OrdineTemporaneo(models.Model):
     idTavolo = models.ForeignKey(Tavolo, on_delete=CASCADE)
-    uscitaAttuale = models.IntegerField(validators=[MinValueValidator(0)])
     orario = models.TimeField()
     class Meta:
         verbose_name = 'OrdineTemporaneo'
