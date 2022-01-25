@@ -2,7 +2,12 @@
     <div class="col-sm-11 col-md-8 ordiniPreparazione">
         {% if ordiniinpreparazione %}
         <h3>Ordini in preparazione</h3>
+        <div class="container">
+        <div class="row">
         {% for ordine in ordiniinpreparazione %}
+        
+
+        
         <div class="col-sm-11 col-md-3 ordine">
             <p>Tavolo: {{ordine.idTavolo}}</p>
             <hr>
@@ -24,7 +29,7 @@
         </div>
             
         {% endfor %}
-
+        </div></div>
         {% else %}
         <div class="centrato">
             <h3>Nessun ordine attualmente in preparazione.</h3>
