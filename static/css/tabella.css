@@ -12,6 +12,9 @@ label {
 input { padding-left: 2px;}
 
 @media only screen and (max-width: 600px) {
+    .row{
+        width: 100% !important;
+    }
     .buttonAzione, .divSuccess{
         margin-left: 3%;
         margin-right: 3%;
