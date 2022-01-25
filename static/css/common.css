@@ -190,3 +190,9 @@ span{
     z-index: 900;
     background-color: rgba(44, 44, 44, 0.37);
 }
+.breadcrumb-item{
+    text-decoration: underline;
+}
+.active{
+    text-decoration: none;
+}

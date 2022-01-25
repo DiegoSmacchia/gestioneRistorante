@@ -133,7 +133,7 @@ def effettuaPreparazioni(request):
     if(request.method == 'POST'):
         preparazioni = Preparazione.objects.all()
         for preparazione in preparazioni:
-            scorta = Scorta.objects.get(id = preparazione.idScorta)
+            scorta = Scorta.objects.get(id = preparazione.idScorta.id)
             scorta.quantitaAttuale = scorta.quantitaMinima
             scorta.save()
             aggiornaListe(scorta)
