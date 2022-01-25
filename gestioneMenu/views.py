@@ -110,7 +110,7 @@ def modificaPiatto(request):
     if request.method == 'POST':
         idPiatto = request.POST['idPiatto']
         piatto = Piatto.objects.get(id=idPiatto)
-        form = PiattoForm(initial={'nome':piatto.nome, 'tempoPreparazione':piatto.tempoPreparazione, 'tempoCottura':piatto.tempoCottura, 'idCategoria':piatto.idCategoria})
+        form = PiattoForm(initial={'nome':piatto.nome, 'idCategoria':piatto.idCategoria})
 
         return render(request, 'piatti/formPiatto.html', {'idPiatto':idPiatto, 'form':form, 'oggetto':'Modifica'})
     else:
@@ -128,8 +128,6 @@ def applicaInserimentoModificaPiatto(request):
                 piatto = Piatto.objects.get(id=idPiatto)
             piatto.idCategoria = form.cleaned_data['idCategoria']
             piatto.nome = form.cleaned_data['nome']
-            piatto.tempoPreparazione = form.cleaned_data['tempoPreparazione']
-            piatto.tempoCottura = form.cleaned_data['tempoCottura']
             piatto.save()
             return render(request, 'operazioneRiuscita.html', {'messaggio':"Operazione Riuscita!"})
         else:

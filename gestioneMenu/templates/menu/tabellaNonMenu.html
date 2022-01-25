@@ -3,8 +3,6 @@
       <tr>
         <th scope="col">Nome</th>
         <th scope="col">Categoria</th>
-        <th scope="col">Tempo Preparazione</th>
-        <th scope="col">Tempo Cottura</th>
         {% if permessiAzioni %}
           <th scope="col">Azioni</th>
         {% endif %}
@@ -18,12 +16,6 @@
             </td>
             <td>
               {{ piatto.idCategoria }}
-            </td>
-            <td>
-                {{ piatto.tempoPreparazione}} Minuti
-            </td>
-            <td>
-                {{ piatto.tempoCottura}} Minuti
             </td>
             {% if permessiAzioni %}
             <td>

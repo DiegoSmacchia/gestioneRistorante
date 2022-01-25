@@ -15,12 +15,10 @@ class IngredienteForm(ModelForm):
 class PiattoForm(ModelForm):
     class Meta:
         model = Piatto
-        fields = ['nome', 'idCategoria', 'tempoPreparazione', 'tempoCottura']
+        fields = ['nome', 'idCategoria']
         labels = {
             'nome':'Nome: ',
-            'idCategoria':'Categoria: ',
-            'tempoPreparazione':'Tempo di preparazione: ',
-            'tempoCottura':'Tempo di cottura: '
+            'idCategoria':'Categoria: '
         }
 
 class IngredientePiattoForm(ModelForm):

@@ -32,8 +32,6 @@ class Ingrediente(models.Model):
 class Piatto(models.Model):
     nome = models.CharField(max_length=200)
     idCategoria = ForeignKey(Categoria, on_delete=CASCADE)
-    tempoPreparazione = models.DecimalField(max_digits=15,decimal_places=2,validators=[MinValueValidator(0)])
-    tempoCottura = models.DecimalField(max_digits=15,decimal_places=2,validators=[MinValueValidator(0)])
     def __str__(self):
         return self.nome
     class Meta:
