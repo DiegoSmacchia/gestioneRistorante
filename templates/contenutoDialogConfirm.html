@@ -21,7 +21,7 @@
                     <input type="hidden" value={{parametro}} name={{nomeparametro}}>
                     {% endif %}
 
-                    <button type="submit" class="btn btn-success" @click="dialogOpen = false">Conferma</button>
+                    <button type="submit" class="btn btn-success" {% if nonChiudereConferma %} {% else %} @click="dialogOpen = false" {% endif %}>Conferma</button>
                 </form>
             </div>
             <div class="col-sm-0 col-md-4"></div>

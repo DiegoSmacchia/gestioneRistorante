@@ -11,6 +11,7 @@ a, a:hover{
     padding: 10px;
 }
 .contenutoCategoria{
+    border:none;
     padding: 10px;
     background-color: rgb(30,109,255);
     border-radius: 10px;
@@ -19,14 +20,21 @@ a, a:hover{
     transition: background-color 0.5s ease-out;
     color: #dddddd;
 }
+.submitCategoria{
+    width: 100%;
+}
 .contenutoCategoria:hover{
     background-color: rgb(0, 70, 201);
 }
+
 @media only screen and (max-width: 600px) {
     .contenutoCategoria{
         width: 98%;
         margin-right: 1%;
         margin-left: 1%;
+    }
+    .row{
+        width: 100% !important;
     }
 }
 .iconaCategoria{

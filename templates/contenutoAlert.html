@@ -1,0 +1,23 @@
+<dv x-show="dialogOpen" @click.away="dialogOpen = false"  class="dialog" >
+    <div>
+        <h2 class={{classetesto}}>{{titolo}}</h2>
+        {% if alertSuccesso %}
+        <i class="fas fa-check fa-6x"></i>
+        {% else %}
+        <i class="fas fa-times fa-6x"></i>
+        {% endif %}
+    </div>
+    <hr>
+    <div>
+      <p class={{classetesto}}>{{contenuto}}</p>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-0 col-md-5"></div>
+            <div class="col-sm-12 col-md-2">
+                <button class="btn btn-primary" @click="dialogOpen = false">Ok</button>
+            </div>
+            <div class="col-sm-0 col-md-5"></div>
+        </div>
+    </div>
+      
+</div>

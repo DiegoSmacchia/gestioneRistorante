@@ -34,4 +34,7 @@ urlpatterns = [
 
     path('conto/<int:idTavolo>', views.conto, name = 'conto'),
 
+    path('confermaFineServizio', views.confermaFineServizio, name='confermaFineServizio'),
+    path('fineServizio', views.fineServizio, name='fineServizio')
+
 ]

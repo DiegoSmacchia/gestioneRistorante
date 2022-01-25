@@ -17,16 +17,20 @@ def gestioneCucina(request):
 @login_required
 def contenutoCucina(request):
     ordini = Ordine.objects.all().order_by('orario')
-    orarioPrimoOrdine = datetime.strptime(str(ordini.first().orario), '%H:%M:%S.%f')
-    componentiInAttesa = ComponenteOrdine.objects.filter(stato = Stato.objects.get(id = 1))
-    componentiInPreparazione = ComponenteOrdine.objects.filter(stato = Stato.objects.get(id = 2))
-
-    for componente in componentiInAttesa:
-        orarioOrdine = datetime.strptime(str(ordini.get(id = componente.idOrdine.id).orario), '%H:%M:%S.%f')
-        componente.priorita = (1 + (orarioPrimoOrdine - orarioOrdine).total_seconds() ) * componente.uscita
-    componentiInAttesa.order_by('priorita')
-
+    componentiInAttesa = []
+    componentiInPreparazione = []
     ordiniInPreparazione = []
+    if ordini.count() > 0:
+        orarioPrimoOrdine = datetime.strptime(str(ordini.first().orario), '%H:%M:%S.%f')
+        componentiInAttesa = ComponenteOrdine.objects.filter(stato = Stato.objects.get(id = 1))
+        componentiInPreparazione = ComponenteOrdine.objects.filter(stato = Stato.objects.get(id = 2))
+
+        for componente in componentiInAttesa:
+            orarioOrdine = datetime.strptime(str(ordini.get(id = componente.idOrdine.id).orario), '%H:%M:%S.%f')
+            componente.priorita = (1 + (orarioPrimoOrdine - orarioOrdine).total_seconds() ) * componente.uscita
+        
+        componentiInAttesa.order_by('priorita')
+
     for componente in componentiInPreparazione:
         if(not ordiniInPreparazione.__contains__(componente.idOrdine) ):
             ordiniInPreparazione.append(componente.idOrdine)

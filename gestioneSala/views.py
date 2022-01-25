@@ -15,7 +15,7 @@ from gestioneMenu.models import Piatto, Menu
 # Create your views here.
 @login_required
 def gestioneSala(request):
-    return render(request, 'gestioneSala.html')
+    return render(request, 'gestioneSala.html', {'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Ordine')})
 
 @login_required
 def saleTavoli(request):
@@ -162,13 +162,13 @@ def eliminaTavolo(request):
 ##Ordini
 @login_required
 def ordini(request):
-    tavoli = Tavolo.objects.all().order_by['idSala']
+    tavoliTotali = Tavolo.objects.all().order_by('idSala')
     ordini = Ordine.objects.all()
     tavoliOrdinato = []
     for ordine in ordini:
         tavoliOrdinato.append(ordine.idTavolo)
     print(tavoliOrdinato)
-    return render(request, 'ordini/ordini.html', {'tavoli':tavoli, 'ordini':ordini, 'tavoliordinato':tavoliOrdinato})
+    return render(request, 'ordini/ordini.html', {'tavoli':tavoliTotali, 'ordini':ordini, 'tavoliordinato':tavoliOrdinato})
 
 @login_required
 def gestioneOrdine(request, idTavolo):
@@ -363,3 +363,32 @@ def conto(request, idTavolo):
         return render(request, "ordini/conto.html", {'componenti':componentiOrdine, 'totale':prezzoTotale, 'tavolo':tavolo})
     except Ordine.DoesNotExist:
         return Error
+
+##Fine Servizio
+@login_required
+def confermaFineServizio(request):
+    return render(request, 'contenutoDialogConfirm.html', {'titolo':'Conferma Fine Servizio', 
+                                                        'contenuto':'Questa operazione cancellerà tutti gli ordini ricevuti, procedere?', 
+                                                        'urlrichiesto':'fineServizio', 
+                                                        'hxtarget':'#dialog',
+                                                        'nonChiudereConferma':True})
+
+def fineServizio(request):
+    ordini = Ordine.objects.all()
+    componenti = ComponenteOrdine.objects.all()
+    ordiniTemp = OrdineTemporaneo.objects.all()
+    componentiTemp = ComponenteTemporaneo.objects.all()
+
+    for componente in componenti:
+        if componente.stato != Stato.objects.get(id = 3):
+            return render(request, 'contenutoAlert.html', {'titolo':'Errore', 'contenuto':'C\'è almeno un ordine che non risulta concluso.',
+                                                            'alertSuccesso':False, 'classetesto':'text-danger'})
+    
+    ordini.delete()
+    componenti.delete()
+    ordiniTemp.delete()
+    componentiTemp.delete()
+    return render(request, 'contenutoAlert.html', {'titolo':'Operazione Completata', 'contenuto':'Ordini chiusi!',
+                                                            'alertSuccesso':True, 'classetesto':'text-success'})
+
+

@@ -14,6 +14,9 @@
                     {% csrf_token %}
                     <button type="submit" class="buttonSubmit"><i class="fas fa-share"></i></button>
                 </form>
+                {% if componente.variazioni %}
+                <p class="col-10">Variazioni: {{componente.variazioni}}</p>
+                {% endif %}
             </div>
                 
             <hr>
@@ -34,19 +37,25 @@
         {% for componente in componentiinattesa %}
             <hr>
             <div class="row">
+                <p class="col-10">Tavolo: {{componente.idOrdine.idTavolo}}</p>
                 <p class="col-10">{{componente.quantita}}x{{componente.idPiatto}} (Uscita:{{componente.uscita}})</p>
                 <form hx-post="{% url 'inizioPreparazioneComponente' %}" hx-target="#divNotifica" class="col-2">
                     <input type="hidden" value="{{componente.id}}" name="idComponente">
                     {% csrf_token %}
                     <button type="submit" class="buttonSubmit"><i class="fas fa-utensils"></i></button>
                 </form>
+                {% if componente.variazioni %}
+                <p class="col-10">Variazioni: {{componente.variazioni}}</p>
+                {% endif %}
             </div>
                 
             <hr>
         {% endfor %}
             
         {% else %}
-        <h3>Nessun ordine in attesa.</h3>
+        <div class="centrato">
+            <h3>Nessun ordine in attesa.</h3>
+        </div>
         {% endif %}
     </div>
 </div>

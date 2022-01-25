@@ -6,6 +6,16 @@
 {% endblock %}
 {% block content %}
 <div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'gestioneSala' %}">Gestione Sala</a></li>
+            <li class="breadcrumb-item active">Ordini</li>
+        </ol>
+    </nav>
+    <hr>
+  </div>
+<div class="container-fluid">
     <div class="row">
         {% for tavolo in tavoli %}
         <div  class="col-sm-12 col-md-6 col-lg-1 categoria">
