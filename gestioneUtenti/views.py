@@ -35,6 +35,8 @@ def nuovoUtente(request):
     if request.method == 'POST':
         form = UtenteForm(request.POST)
         if form.is_valid():
+            if form.cleaned_data['password'] != form.cleaned_data['confermaPassword']:
+                return render(request, "registrazioneErrore.html", { 'form':form, 'messaggio':'Le due password non corrispondono.' })
             if User.objects.filter(username = form.cleaned_data['username']):
                 return render(request, "registrazioneErrore.html", { 'form':form, 'messaggio':'Nome utente già presente.' })
             else:

@@ -6,6 +6,7 @@ class UtenteForm(forms.Form):
     nome = forms.CharField(label= "Nome:", max_length=100, required=False)
     cognome = forms.CharField(label="Cognome:",max_length=100, required=False)
     password = forms.CharField(label= "Password:", max_length=100, widget=forms.PasswordInput())
+    confermaPassword = forms.CharField(label= "Conferma Password:", max_length=100, widget=forms.PasswordInput())
     email = forms.EmailField(label="Email:", required=False)
     
 
