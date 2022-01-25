@@ -27,9 +27,8 @@
                     {{componente.variazioni}}
                 </td>
                 <td>
-                    <form hx-post="{% url 'eliminaComponenteTemporaneo' %}" hx-target="#divComponenteTemporaneo">
+                    <form hx-post="{% url 'confirmEliminaComponenteTemporaneo' %}"  hx-target="#dialog" @click="dialogOpen = true">
                         <input type="hidden" value="{{componente.id}}" name="idComponente">
-                        <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
                         {% csrf_token %}
                         <button type="submit" class="buttonSubmit"><i class="fas fa-trash"></i></button>
                       </form>

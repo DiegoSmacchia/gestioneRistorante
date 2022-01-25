@@ -45,7 +45,6 @@ def applicaInserimentoModificaScorta(request):
     if request.method == 'POST':
         form = ScortaForm(request.POST)
         idScorta = request.POST['idScorta']
-        print(form)
         if form.is_valid():
             if idScorta == '0':
                 try:
@@ -143,8 +142,6 @@ def effettuaPreparazioni(request):
         return Error
 
 def aggiornaListe(scorta):
-    print(scorta.quantitaAttuale)
-    print(scorta.quantitaMinima)
     if(scorta.quantitaAttuale < scorta.quantitaMinima):
         if(scorta.quantitaAttuale > 0 ):
             urgenza = 1

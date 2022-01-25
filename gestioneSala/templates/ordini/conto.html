@@ -7,7 +7,18 @@
 {% endblock %}
 
 {% block content %}
-
+<div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'gestioneSala' %}">Gestione Sala</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'ordini' %}">Ordini</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'gestioneOrdine' tavolo %}">Ordine</a></li>
+            <li class="breadcrumb-item active">Conto</li>
+        </ol>
+    </nav>
+    <hr>
+  </div>
 <div class="conto">
     <h2>Conto del tavolo {{tavolo.nome}}</h2>
     <hr>

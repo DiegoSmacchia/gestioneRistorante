@@ -247,7 +247,6 @@ def tabellaNonMenu(request):
     piatti = Piatto.objects.all()
     piattiMenu = Menu.objects.all()
     piattiNonMenu = filtraPiattiNonMenu(piatti, piattiMenu)
-    print(piattiNonMenu)
     return render(request, 'menu/tabellaNonMenu.html', {'piattiNonMenu' : piattiNonMenu, 'permessiAzioni': request.user.has_perm('gestioneMenu.delete_Menu')})
 
 
@@ -268,7 +267,6 @@ def aggiungiPiattoMenu(request):
         piatto = Piatto.objects.get(id = idPiatto)
         nomePiatto = piatto.nome
         form = MenuForm(initial={'idPiatto':piatto })
-        print(form)
         return render(request, 'menu/aggiungiPiattoMenu.html', {'nomePiatto':nomePiatto, 'form':form})
     else:
         return Error
@@ -347,7 +345,6 @@ def applicaInserimentoModificaMisura(request):
         form = MisuraForm(request.POST)
         idMisura = request.POST['idMisura']
         if form.is_valid():
-            print(idMisura)
             if idMisura == '0':
                 misura = Misura()
                 if Misura.objects.filter(nome = form.cleaned_data['nome']):

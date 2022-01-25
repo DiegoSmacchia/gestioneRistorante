@@ -171,7 +171,6 @@ def ordini(request):
     tavoliOrdinato = []
     for ordine in ordini:
         tavoliOrdinato.append(ordine.idTavolo)
-    print(tavoliOrdinato)
     return render(request, 'ordini/ordini.html', {'tavoli':tavoliTotali, 'ordini':ordini, 'tavoliordinato':tavoliOrdinato})
 
 @login_required
@@ -291,8 +290,7 @@ def eliminaComponenteTemporaneo(request):
     if request.method == "POST":
         idComponente = request.POST['idComponente']
         componente = ComponenteTemporaneo.objects.get(id = idComponente)
-        idOrdineTemporaneo = request.POST['idOrdineTemporaneo']
-        ordineTemporaneo = OrdineTemporaneo.objects.get(id = idOrdineTemporaneo)
+        ordineTemporaneo = OrdineTemporaneo.objects.get(id = componente.idOrdine.id)
 
         componente.delete()
         componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
