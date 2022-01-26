@@ -143,17 +143,12 @@ def effettuaPreparazioni(request):
 
 def aggiornaListe(scorta):
     if(scorta.quantitaAttuale < scorta.quantitaMinima):
-        if(scorta.quantitaAttuale > 0 ):
-            urgenza = 1
-        else:
-            urgenza = 2
  
         if(scorta.idIngrediente.fattoInCasa):
             try:
                 preparazione = Preparazione.objects.get(idScorta = scorta)
             except Preparazione.DoesNotExist:
                 preparazione = Preparazione(idScorta = scorta)
-            preparazione.urgenza = urgenza
             preparazione.quantita = scorta.quantitaMinima - scorta.quantitaAttuale
             preparazione.save()
         else:
@@ -161,7 +156,6 @@ def aggiornaListe(scorta):
                 spesa = Spesa.objects.get(idScorta = scorta)
             except Spesa.DoesNotExist:
                 spesa = Spesa(idScorta = scorta)
-            spesa.urgenza = urgenza
             spesa.quantita = scorta.quantitaMinima - scorta.quantitaAttuale
             spesa.save()
     else:
