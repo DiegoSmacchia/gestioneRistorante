@@ -22,6 +22,12 @@
     </div>
 </div>
 
+<div class="row">
+  <div class="col-sm-12 col-md-6 col-lg-4">
+    <div id="divNotifica"></div>
+  </div>
+</div>
+
 <div hx-get="{% url 'tabellaOrdini' tavolo %}" hx-trigger="every 1s">
   {% if componenti %}
   <div class="col-sm-12 col-md-6 col-lg-4">
@@ -134,7 +140,7 @@
     </table>
     <div class="row">
         <div class="col-sm-6 col-md-3">
-            <form hx-post="{% url 'confermaAggiuntaComponenti' %}">
+            <form hx-post="{% url 'confermaAggiuntaComponenti' %}" hx-target="divNotifica">
                 {% csrf_token %}
                 <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
                 <button type="submit" class="btn btn-success buttonAzione" >Conferma</button>
@@ -172,7 +178,7 @@
             </td>
             <td>
                 
-                <form hx-post="{% url 'aggiungiComponenteTemporaneo' %}" hx-target="#divComponenteTemporaneo">
+                <form hx-post="{% url 'aggiungiComponenteTemporaneo' %}" hx-target="#divNotifica">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
                             <label>Quantità: </label>

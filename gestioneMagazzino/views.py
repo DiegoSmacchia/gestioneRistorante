@@ -1,10 +1,13 @@
 from msilib.schema import Error
+from xmlrpc.client import MAXINT
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from numpy import identity
+from math import floor
 
 from .forms import ScortaForm
 from .models import Preparazione, Scorta, Spesa
+from gestioneMenu.models import Piatto, IngredientePiatto
 
 # Create your views here.
 @login_required
@@ -171,3 +174,16 @@ def aggiornaListe(scorta):
                 spesa.delete()
             except Spesa.DoesNotExist:
                 print("Spesa inesistente.")
+
+def massimoPiatti(idPiatto):
+    massimo = MAXINT
+    ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = idPiatto)
+    for ingredientePiatto in ingredientiPiatto:
+        try:
+            scorta = Scorta.objects.get(idIngrediente = ingredientePiatto.idIngrediente.id)
+            if (scorta.quantitaAttuale / ingredientePiatto.quantita) < massimo:
+                massimo = floor(scorta.quantitaAttuale / ingredientePiatto.quantita)
+        except Scorta.DoesNotExist:
+            massimo = 0
+    print(massimo)
+    return massimo

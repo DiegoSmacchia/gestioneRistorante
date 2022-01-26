@@ -45,17 +45,6 @@ def componenteServito(request):
         componente = ComponenteOrdine.objects.get(id = idComponente)
         componente.stato = Stato.objects.get(id = 3)
 
-        ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
-        for ingrediente in ingredientiPiatto:
-            try:
-                scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
-                scorta.quantitaAttuale -= float(Decimal(ingrediente.quantita) * componente.quantita)
-                scorta.save() 
-                aggiornaListe(scorta)
-            
-            except Scorta.DoesNotExist:
-                print("Scorta Inesistente.")
-
         componente.save()
         return render(request, 'operazioneRiuscita.html', {'messaggio':'componente segnato come servito!'})
     else:

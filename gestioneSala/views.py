@@ -9,8 +9,9 @@ from .forms import ComponenteOrdineForm
 
 from gestioneSala.forms import SalaForm, TavoloForm
 from .models import ComponenteOrdine, ComponenteTemporaneo, Ordine, OrdineTemporaneo, Sala, Stato, Tavolo
-from gestioneMenu.models import Piatto, Menu
-
+from gestioneMenu.models import Piatto, Menu, IngredientePiatto
+from gestioneMagazzino.views import massimoPiatti, aggiornaListe
+from gestioneMagazzino.views import Scorta
 
 # Create your views here.
 @login_required
@@ -231,19 +232,24 @@ def aggiungiComponenteTemporaneo(request):
         uscita = request.POST['uscita']
         quantita = request.POST['quantita']
         variazioni = request.POST['variazioni']
-        try:
-            ordineTemporaneo = OrdineTemporaneo.objects.get(idTavolo = idTavolo)
-        except OrdineTemporaneo.DoesNotExist:
-            ordineTemporaneo = None
 
-        if not ordineTemporaneo:
-            ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, orario=datetime.now().time())
-            ordineTemporaneo.save()
-        statoIniziale = Stato.objects.get(id = 1)
-        componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = statoIniziale)
-        componente.save()
-        componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
-        return render(request, 'ordini/ordiniTemporanei.html', {'componentitemporanei':componentiTemporanei, 'idOrdineTemporaneo':ordineTemporaneo.id})
+        massimo = massimoPiatti(piatto.id)
+        if float(quantita) <= massimo:
+            try:
+                ordineTemporaneo = OrdineTemporaneo.objects.get(idTavolo = idTavolo)
+            except OrdineTemporaneo.DoesNotExist:
+                ordineTemporaneo = None     
+            if not ordineTemporaneo:
+                ordineTemporaneo = OrdineTemporaneo(idTavolo = tavolo, orario=datetime.now().time())
+                ordineTemporaneo.save()
+
+            statoIniziale = Stato.objects.get(id = 1)
+            componente = ComponenteTemporaneo(idOrdine = ordineTemporaneo, idPiatto = piatto, uscita = uscita, quantita = quantita, variazioni = variazioni, stato = statoIniziale)
+            componente.save()
+            return render(request, 'operazioneRiuscita.html', {'messaggio':'Inserimento del componente effettuato.'})
+        else:
+            messaggio = "Il massimo di " + piatto.nome + " ordinabile è " + str(massimo) + "."
+            return render(request, 'operazioneFallita.html', {'messaggio':messaggio})
 
     else:
         return Error
@@ -254,6 +260,13 @@ def confermaAggiuntaComponenti(request):
         idOrdineTemporaneo = request.POST['idOrdineTemporaneo']
         ordineTemporaneo = OrdineTemporaneo.objects.get(id = idOrdineTemporaneo)
         componentiTemporanei = ComponenteTemporaneo.objects.filter(idOrdine = ordineTemporaneo).order_by('uscita')
+
+        for componenteTemp in componentiTemporanei:
+            massimo = massimoPiatti(componenteTemp.idPiatto.id)
+            if float(componenteTemp.quantita) > massimo:
+                messaggio = "Il massimo di " + componenteTemp.idPiatto.nome + " ordinabile è " + str(massimo) + "."
+                return render(request, 'operazioneFallita.html', {'messaggio':messaggio})
+
         try:
             ordine = Ordine.objects.get(idTavolo = ordineTemporaneo.idTavolo)
         except Ordine.DoesNotExist:
@@ -267,6 +280,19 @@ def confermaAggiuntaComponenti(request):
                                         variazioni = componenteTemp.variazioni,
                                         stato = componenteTemp.stato)
             componente.save()
+
+            ##Aggiornamento delle Scorte
+            ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
+            for ingrediente in ingredientiPiatto:
+                try:
+                    scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                    scorta.quantitaAttuale -= float(Decimal(ingrediente.quantita) * componente.quantita)
+                    scorta.save() 
+                    aggiornaListe(scorta)
+            
+                except Scorta.DoesNotExist:
+                    print("Scorta Inesistente.")
+
             componenteTemp.delete()
         ordineTemporaneo.delete()
         return render(request, 'operazioneRiuscita.html', {'messaggio':'ordine inserito!'})
@@ -316,6 +342,44 @@ def applicaModificheComponenteOrdine(request):
         idComponente = request.POST['idComponente']
         if form.is_valid():
             componente = ComponenteOrdine.objects.get(id=idComponente)
+
+            ##Aggiornamento delle Scorte
+            if componente.idPiatto != form.cleaned_data['idPiatto']:
+                ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
+                for ingrediente in ingredientiPiatto:
+                    try:
+                        scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                        scorta.quantitaAttuale += float(Decimal(ingrediente.quantita) * componente.quantita)
+                        scorta.save() 
+                        aggiornaListe(scorta)
+            
+                    except Scorta.DoesNotExist:
+                        print("Scorta Inesistente.")
+                
+                ingredientiPiattoNuovo = IngredientePiatto.objects.filter(idPiatto = form.cleaned_data['idPiatto'])
+                for ingrediente in ingredientiPiattoNuovo:
+                    try:
+                        scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                        scorta.quantitaAttuale -= float(Decimal(ingrediente.quantita)) * float(form.cleaned_data['quantita'])
+                        scorta.save() 
+                        aggiornaListe(scorta)
+            
+                    except Scorta.DoesNotExist:
+                        print("Scorta Inesistente.")
+            else:
+                if componente.quantita != form.cleaned_data['quantita']:
+                    ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
+                for ingrediente in ingredientiPiatto:
+                    try:
+                        scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                        scorta.quantitaAttuale += float(Decimal(ingrediente.quantita) * componente.quantita)
+                        scorta.quantitaAttuale -= float(ingrediente.quantita) * float(form.cleaned_data['quantita'])
+                        scorta.save() 
+                        aggiornaListe(scorta)
+            
+                    except Scorta.DoesNotExist:
+                        print("Scorta Inesistente.")
+
             componente.idPiatto = form.cleaned_data['idPiatto']
             componente.quantita = form.cleaned_data['quantita']
             componente.uscita = form.cleaned_data['uscita']
@@ -345,6 +409,19 @@ def eliminaComponenteOrdine(request):
     if request.method == 'POST':
         idComponente = request.POST['idComponente']
         componente = ComponenteOrdine.objects.get(id=idComponente)
+
+        ##Aggiornamento Scorte
+        ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
+        for ingrediente in ingredientiPiatto:
+            try:
+                scorta = Scorta.objects.get(idIngrediente = ingrediente.idIngrediente)
+                scorta.quantitaAttuale += float(Decimal(ingrediente.quantita) * componente.quantita)
+                scorta.save() 
+                aggiornaListe(scorta)
+            
+            except Scorta.DoesNotExist:
+                print("Scorta Inesistente.")
+
         componente.delete()
         return render(request, 'operazioneRiuscita.html', {'messaggio':"Componente Eliminato!"})
     else:

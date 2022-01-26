@@ -107,7 +107,7 @@ nessun Ordine confermato.
     </table>
     <div class="row">
         <div class="col-sm-6 col-md-3">
-            <form hx-post="{% url 'confermaAggiuntaComponenti' %}">
+            <form hx-post="{% url 'confermaAggiuntaComponenti' %}" hx-target="#divNotifica">
                 {% csrf_token %}
                 <input type="hidden" value="{{idOrdineTemporaneo}}" name="idOrdineTemporaneo">
                 <button type="submit" class="btn btn-success buttonAzione" >Conferma</button>
