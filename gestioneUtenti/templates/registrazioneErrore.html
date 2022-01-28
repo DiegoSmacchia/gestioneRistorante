@@ -1,11 +1,22 @@
-{% extends 'common.html' %}
+{% extends 'navbar.html' %}
 {% load static %}
 
 {% block contentHead %}
 <link rel="stylesheet" href="{% static 'css/login.css' %}">
 {% endblock %}
 
-{% block contentPrincipale %}
+{% block content %}
+
+<div class="container-fluid">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item active">Nuovo Utente</li>
+        </ol>
+    </nav>
+    <hr>
+</div>
+
 <div class="divLogin">
     <div class="titoloLogin">
         Registrazione

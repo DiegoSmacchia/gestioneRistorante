@@ -341,10 +341,18 @@ def applicaModificheComponenteOrdine(request):
         form = ComponenteOrdineForm(request.POST)
         idComponente = request.POST['idComponente']
         if form.is_valid():
+
             componente = ComponenteOrdine.objects.get(id=idComponente)
+            ingredientiNuovoPiatto = IngredientePiatto.objects.filter(idPiatto = form.cleaned_data['idPiatto'])
+            for ingrediente in ingredientiNuovoPiatto:
+                    massimo = massimoPiatti(ingrediente.idPiatto.id)
+            if float(form.cleaned_data['quantita']) > massimo:
+                messaggio = "Il massimo di " + str(form.cleaned_data['idPiatto']) + " ordinabile è " + str(massimo) + "."
+                return render(request, 'operazioneFallita.html', {'messaggio':messaggio})
 
             ##Aggiornamento delle Scorte
             if componente.idPiatto != form.cleaned_data['idPiatto']:
+
                 ingredientiPiatto = IngredientePiatto.objects.filter(idPiatto = componente.idPiatto)
                 for ingrediente in ingredientiPiatto:
                     try:

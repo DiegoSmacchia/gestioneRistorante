@@ -6,7 +6,7 @@ from gestioneMenu.models import Piatto
 
 # Create your models here.
 class Sala(models.Model):
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=20)
     def __str__(self):
         return self.nome
     class Meta:
@@ -14,7 +14,7 @@ class Sala(models.Model):
         verbose_name_plural = 'Sale'
 
 class Tavolo(models.Model):
-    nome = models.CharField(max_length=50)
+    nome = models.CharField(max_length=20)
     idSala = models.ForeignKey(Sala, on_delete=CASCADE)
     inGestione = models.BooleanField(default=False)
     def __str__(self):
